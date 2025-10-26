@@ -1,0 +1,5 @@
+INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('El Celler de Can Roca', 'Girona, España', 'Cocina de vanguardia', 'Lunes a Sábado: 12:30–15:30', '+34 972 222 157');
+INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('Disfrutar', 'Barcelona, España', 'Cocina moderna', 'Martes a Sábado: 13:00–16:00', '+34 933 486 896');
+INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('DiverXO', 'Madrid, España', 'Cocina de autor', 'Miércoles a Sábado: 13:30–16:00', '+34 915 30 85 11');
+INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('Aponiente', 'El Puerto de Santa María, España', 'Cocina marinera', 'Martes a Sábado: 13:30–15:30', '+34 956 83 50 10');
+INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('Azurmendi', 'Larrabetzu, España', 'Cocina vasca', 'Martes a Sábado: 13:00–15:30', '+34 946 54 22 42');

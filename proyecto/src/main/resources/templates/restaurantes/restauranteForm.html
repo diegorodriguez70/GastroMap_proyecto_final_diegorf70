@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Añadir Nuevo Restaurante</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="mb-4">Añadir Nuevo Restaurante</h1>
+
+    <form th:action="@{/restaurantes/saveRestaurante}" th:object="${restaurante}" method="post">
+		
+		<div class="mb-3">
+			<label  for="id" class="form-label">ID:</label>
+			<input type="text" class="form-control" id="id" th:field="*{idRestaurante}" readonly/> 
+		</div>
+		
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" class="form-control" id="nombre" th:field="*{nombre}" />
+            <div th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="text-danger">Error Nombre</div> 
+        </div>
+
+        <div class="mb-3">
+            <label for="ubicacion" class="form-label">Ubicación:</label>
+            <input type="text" class="form-control" id="ubicacion" th:field="*{ubicacion}" />
+            <div th:if="${#fields.hasErrors('ubicacion')}" th:errors="*{ubicacion}" class="text-danger">Error Ubicación</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="carta" class="form-label">Carta (URL o Descripción):</label>
+            <textarea class="form-control" id="carta" th:field="*{carta}" rows="3"></textarea>
+            <div th:if="${#fields.hasErrors('carta')}" th:errors="*{carta}" class="text-danger">Error Carta</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="horarios" class="form-label">Horarios:</label>
+            <input type="text" class="form-control" id="horarios" th:field="*{horarios}" />
+            <div th:if="${#fields.hasErrors('horarios')}" th:errors="*{horarios}" class="text-danger">Error Horarios</div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="contacto" class="form-label">Contacto:</label>
+            <input type="text" class="form-control" id="contacto" th:field="*{contacto}" />
+            <div th:if="${#fields.hasErrors('contacto')}" th:errors="*{contacto}" class="text-danger">Error Contacto</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Restaurante</button>
+        <a th:href="@{/restaurantes}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
