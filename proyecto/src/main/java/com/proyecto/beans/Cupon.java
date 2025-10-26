@@ -19,7 +19,7 @@ public class Cupon {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idCupon;
-	private String tiempo_duracion;
+	private String tiempoDuracion;
 	private BigDecimal descuento;
 
 }

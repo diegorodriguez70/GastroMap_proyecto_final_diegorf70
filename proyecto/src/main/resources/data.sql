@@ -3,3 +3,8 @@ INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('
 INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('DiverXO', 'Madrid, España', 'Cocina de autor', 'Miércoles a Sábado: 13:30–16:00', '+34 915 30 85 11');
 INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('Aponiente', 'El Puerto de Santa María, España', 'Cocina marinera', 'Martes a Sábado: 13:30–15:30', '+34 956 83 50 10');
 INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto) VALUES ('Azurmendi', 'Larrabetzu, España', 'Cocina vasca', 'Martes a Sábado: 13:00–15:30', '+34 946 54 22 42');
+INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('1 semana', 10.0);
+INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('2 semanas', 15.0);
+INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('1 mes', 20.0);
+INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('3 meses', 25.0);
+INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('6 meses', 30.0);
