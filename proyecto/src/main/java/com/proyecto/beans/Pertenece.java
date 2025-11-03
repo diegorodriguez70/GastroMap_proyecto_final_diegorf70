@@ -10,6 +10,17 @@ public class Pertenece {
     private PerteneceId id; 
 
 
+	@ManyToOne
+    @MapsId("idCupon")  
+    @JoinColumn(name = "id_cupon", referencedColumnName = "idCupon", insertable = false, updatable = false)
+    private Cupon cupon;
+
+    @ManyToOne
+    @MapsId("idRestaurante")  
+    @JoinColumn(name = "id_restaurante", referencedColumnName = "idRestaurante", insertable = false, updatable = false)
+    private Restaurante restaurante;
+
+
     public Cupon getCupon() {
 		return cupon;
 	}
@@ -33,16 +44,6 @@ public class Pertenece {
 	public void setRestaurante(Restaurante restaurante) {
 		this.restaurante = restaurante;
 	}
-
-	@ManyToOne
-    @MapsId("idCupon")  
-    @JoinColumn(name = "id_cupon", referencedColumnName = "idCupon", insertable = false, updatable = false)
-    private Cupon cupon;
-
-    @ManyToOne
-    @MapsId("idRestaurante")  
-    @JoinColumn(name = "id_restaurante", referencedColumnName = "idRestaurante", insertable = false, updatable = false)
-    private Restaurante restaurante;
 
  
 }

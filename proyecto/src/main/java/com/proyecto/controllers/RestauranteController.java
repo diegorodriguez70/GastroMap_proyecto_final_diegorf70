@@ -26,7 +26,8 @@ public class RestauranteController {
 
 	@Autowired
 	RestauranteService restauranteService;
-
+	
+	
 	@GetMapping("/restaurantes")
 	public ModelAndView getRestaurantes() {
 

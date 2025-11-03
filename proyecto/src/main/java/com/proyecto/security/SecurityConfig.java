@@ -1,4 +1,5 @@
 package com.proyecto.security;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,12 +16,22 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
-                    .requestMatchers("/admin/**").hasRole("ADMIN") // Rutas de administrador
-                    .requestMatchers("/**").authenticated() // Resto de rutas
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll() // login accesible
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
             )
-            .formLogin(formLogin -> formLogin.permitAll())
+            .formLogin(form -> form
+            	    .loginPage("/login")              
+            	    .loginProcessingUrl("/login")      
+            	    .defaultSuccessUrl("/index", true)  
+            	    .permitAll()
+        	)
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+            )
             .csrf(csrf -> csrf.disable());
 
         return http.build();
@@ -32,12 +43,12 @@ public class SecurityConfig {
             .password(passwordEncoder().encode("admin"))
             .roles("ADMIN")
             .build();
-        
+
         UserDetails user = User.withUsername("user")
             .password(passwordEncoder().encode("user"))
             .roles("USER")
             .build();
-            
+
         return new InMemoryUserDetailsManager(admin, user);
     }
 
