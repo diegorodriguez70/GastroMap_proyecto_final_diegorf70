@@ -45,7 +45,7 @@ public class Restaurante {
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Pertenece> pertenece = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "restaurante")
+	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Reserva> reservas = new ArrayList<>();
 
 
