@@ -29,4 +29,9 @@ public class Reserva {
 	@ManyToOne
     @JoinColumn(name = "idRestaurante", nullable = false)
     private Restaurante restaurante;
+	
+	@ManyToOne
+	@JoinColumn(name = "nombreUsuario", nullable = false)
+	private Usuario usuario;
+
 }
