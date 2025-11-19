@@ -8,3 +8,10 @@ INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('2 semanas', 15.0);
 INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('1 mes', 20.0);
 INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('3 meses', 25.0);
 INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('6 meses', 30.0);
+INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (1, 1);
+INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (1, 3);
+
+INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (2, 2);
+INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (2, 4);
+
+INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (3, 5);

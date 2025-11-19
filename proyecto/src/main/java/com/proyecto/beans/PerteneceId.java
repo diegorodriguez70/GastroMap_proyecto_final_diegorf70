@@ -12,7 +12,17 @@ public class PerteneceId implements Serializable {
     private int idCupon;
 
 
-    public int getIdRestaurante() {
+    public PerteneceId() {
+        // Obligatorio para JPA
+    }
+
+    public PerteneceId(int idRestaurante, int idCupon) {
+        this.idRestaurante = idRestaurante;
+        this.idCupon = idCupon;
+    }
+
+
+	public int getIdRestaurante() {
 		return idRestaurante;
 	}
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Añadir Cupón</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="fragmentos/navbar :: navbar"></div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Añadir Cupón al Restaurante</h2>
+
+    <p class="fw-bold">
+        Restaurante:
+        <span th:text="${restaurante.nombre}"></span>
+    </p>
+
+    <form th:action="@{'/restaurantes/' + ${restaurante.idRestaurante} + '/addCupon'}"
+          method="post">
+
+        <div class="mb-3">
+            <label class="form-label">Selecciona un cupón:</label>
+            <select name="idCupon" class="form-select">
+                <option th:each="cupon : ${cupones}"
+                        th:value="${cupon.idCupon}"
+                        th:text="${cupon.tiempoDuracion + ' - ' + cupon.descuento + '%'}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Añadir Cupón</button>
+        <a th:href="@{'/restaurantes/' + ${restaurante.idRestaurante} + '/cupones'}"
+           class="btn btn-secondary">Volver</a>
+
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

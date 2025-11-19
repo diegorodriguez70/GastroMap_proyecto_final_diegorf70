@@ -1,5 +1,6 @@
 package com.proyecto.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.proyecto.beans.Cupon;
+import com.proyecto.beans.Pertenece;
+import com.proyecto.beans.PerteneceId;
 import com.proyecto.beans.Restaurante;
+import com.proyecto.repositories.CuponRepository;
+import com.proyecto.repositories.PerteneceRepository;
 import com.proyecto.repositories.RestauranteRepository;
 import com.proyecto.services.RestauranteService;
 
@@ -23,7 +29,14 @@ public class RestauranteController {
 
 	@Autowired
 	RestauranteRepository restauranteRepository;
+	
+	@Autowired
+	CuponRepository cuponRepository;
 
+	@Autowired
+	PerteneceRepository perteneceRepository;
+
+	
 	@Autowired
 	RestauranteService restauranteService;
 	
@@ -93,5 +106,80 @@ public class RestauranteController {
 
 		return salida;
 	}
+	
+	@GetMapping("/restaurantes/{idRestaurante}/cupones")
+	public ModelAndView verCuponesRestaurante(@PathVariable int idRestaurante) {
+
+	    ModelAndView salida = new ModelAndView("restaurantes/cupones_restaurante");
+
+	    Optional<Restaurante> restauranteOptional = restauranteRepository.findById(idRestaurante);
+
+	    if (restauranteOptional.isPresent()) {
+	        Restaurante restaurante = restauranteOptional.get();
+	        salida.addObject("restaurante", restaurante);
+
+	        // Lista de cupones asociados
+	        List<Cupon> cupones = restaurante.getPertenece()
+	                                         .stream()//como un bucle para procesar
+	                                         .map(p -> p.getCupon())
+	                                         .toList();
+
+	        salida.addObject("cupones", cupones);
+	    } else {
+	        salida.setViewName("redirect:/restaurantes");
+	    }
+
+	    return salida;
+	}
+	
+	@GetMapping("/restaurantes/{idRestaurante}/addCupon")
+	public ModelAndView showAddCuponForm(@PathVariable int idRestaurante) {
+
+	    ModelAndView mav = new ModelAndView("restaurantes/addCupon");
+
+	    // Restaurante seleccionado
+	    Restaurante restaurante = restauranteRepository.findById(idRestaurante).orElse(null);
+	    mav.addObject("restaurante", restaurante);
+
+	    // Todos los cupones
+	    Iterable<Cupon> cupones = cuponRepository.findAll();
+	    mav.addObject("cupones", cupones);
+
+	    return mav;
+	}
+	
+	@PostMapping("/restaurantes/{idRestaurante}/addCupon")
+	public String addCuponToRestaurante(@PathVariable int idRestaurante,
+	                                    @ModelAttribute("idCupon") int idCupon) {
+
+	    // 1) Comprobar si ya existe la relación
+	    boolean existe = perteneceRepository
+	            .existsByIdIdCuponAndIdIdRestaurante(idCupon, idRestaurante);
+
+	    if (!existe) {
+
+	        // 2) Cargar objetos completos
+	        Restaurante restaurante = restauranteRepository.findById(idRestaurante).orElse(null);
+	        Cupon cupon = cuponRepository.findById(idCupon).orElse(null);
+
+	        if (restaurante == null || cupon == null) {
+	            return "redirect:/restaurantes"; // por si acaso
+	        }
+
+	        // 3) Crear la relación
+	        PerteneceId id = new PerteneceId(idRestaurante, idCupon);
+
+	        Pertenece p = new Pertenece();
+	        p.setId(id);
+	        p.setRestaurante(restaurante);  // ✔ necesario
+	        p.setCupon(cupon);              // ✔ necesario
+
+	        perteneceRepository.save(p);
+	    }
+
+	    return "redirect:/restaurantes/" + idRestaurante + "/cupones";
+	}
+
+
 
 }
