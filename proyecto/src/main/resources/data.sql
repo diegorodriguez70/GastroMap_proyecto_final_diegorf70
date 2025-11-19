@@ -15,3 +15,17 @@ INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (2, 2);
 INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (2, 4);
 
 INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (3, 5);
+
+
+-- RESERVAS DE EJEMPLO
+INSERT INTO reserva (fecha, id_restaurante)
+VALUES ('2025-01-15 20:30', 1);
+
+INSERT INTO reserva (fecha, id_restaurante)
+VALUES ('2025-01-18 14:00', 1);
+
+INSERT INTO reserva (fecha, id_restaurante)
+VALUES ('2025-01-25 21:00', 2);
+
+INSERT INTO reserva (fecha, id_restaurante)
+VALUES ('2025-02-02 13:30', 3);
