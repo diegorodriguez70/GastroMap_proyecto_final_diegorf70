@@ -45,16 +45,6 @@ public class ReservaController {
 	@Autowired
 	private CustomUserDetailsService userService;
 	
-//	@GetMapping("/reservas")
-//	public ModelAndView getReservas() {
-//
-//		ModelAndView salida = new ModelAndView("reservas/reservas");
-//		Iterable<Reserva> reservas = reservaRepository.findAll();
-//
-//		salida.addObject("reservas", reservas);
-//		return salida;
-//
-//	}
 	@GetMapping("/reservas")
 	public ModelAndView getReservas(Principal principal) {
 
@@ -116,89 +106,123 @@ public class ReservaController {
 
 	}
 	
-//	@GetMapping("/reservas/add")
-//	public ModelAndView addReserva() {
-//
-//		ModelAndView salida = new ModelAndView("reservas/reservaForm");
-//		salida.addObject("reserva", new Reserva());
-//		return salida;
-//
-//	}
-	
+
+
+
 	@GetMapping("/reservas/add")
-	public ModelAndView addReserva(@RequestParam int idRestaurante, Principal principal) {
+	public ModelAndView addReservaAdmin(Principal principal) {
 
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
-	    ModelAndView mv;
 
-	    // PREPARAMOS LA RESERVA
-	    Reserva r = new Reserva();
-	    Restaurante restaurante = restauranteRepository.findById(idRestaurante).orElse(null);
-	    r.setRestaurante(restaurante);
-
-	    // ✔ ADMIN → formulario completo
-	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
-	        mv = new ModelAndView("reservas/reservaForm");
-	        mv.addObject("restaurantes", restauranteRepository.findAll()); // ADMIN sí necesita la lista
+	    // Si NO es admin → fuera
+	    if (!usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
+	        return new ModelAndView("redirect:/reservas");
 	    }
 
-	    // ✔ USER → formulario simplificado
-	    else {
-	        mv = new ModelAndView("reservas/reservaForm_user");
-	        // nada más, el restaurante ya viene fijado y no se selecciona
-	    }
+	    ModelAndView mv = new ModelAndView("reservas/reservaForm");
 
-	    mv.addObject("reserva", r);
+	    mv.addObject("reserva", new Reserva());
+	    mv.addObject("restaurantes", restauranteRepository.findAll());
+
 	    return mv;
 	}
 
+	@GetMapping("/reservas/add/user")
+	public ModelAndView addReservaUser(
+	        @RequestParam int idRestaurante,
+	        Principal principal) {
 
-
-	
-//	@PostMapping("/reservas/saveReserva")
-//	public String saveReserva(@Valid @ModelAttribute Reserva reserva, BindingResult result) {
-//
-//		if (result.hasErrors()) {
-//			return "reservas/reservaForm";
-//		}
-//		reservaService.saveReserva(reserva);
-//		return "redirect:/reservas";
-//	}
-	
-	@PostMapping("/reservas/saveReserva")
-	public String saveReserva(@Valid @ModelAttribute Reserva reserva,
-	                          BindingResult result, Principal principal) {
-
-	    if (result.hasErrors()) {
-	        return "reservas/reservaForm";
-	    }
-
-	    // Obtener usuario logueado
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-	    reserva.setUsuario(usuario);
+	    Reserva r = new Reserva();
+	    Restaurante restaurante = restauranteRepository
+	            .findById(idRestaurante)
+	            .orElse(null);
 
+	    r.setRestaurante(restaurante);
+
+	    ModelAndView mv = new ModelAndView("reservas/reservaForm_user");
+	    mv.addObject("reserva", r);
+
+	    return mv;
+	}
+
+	@PostMapping("/reservas/saveReserva")
+	public String saveReserva(
+	        @Valid @ModelAttribute Reserva reserva,
+	        BindingResult result,
+	        Principal principal) {
+
+	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
+
+	    // ❗ Validación adicional: el restaurante no puede ser -1
+	    if (reserva.getRestaurante() != null &&
+	        reserva.getRestaurante().getIdRestaurante() == -1) {
+
+	        result.rejectValue("restaurante", "error.restaurante", "Debes seleccionar un restaurante");
+
+	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
+	            return "reservas/reservaForm";
+	        } else {
+	            return "reservas/reservaForm_user";
+	        }
+	    }
+
+	    // Si hay errores de otros campos
+	    if (result.hasErrors()) {
+
+	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
+	            return "reservas/reservaForm";
+	        }
+
+	        return "reservas/reservaForm_user";
+	    }
+
+	    // ✔ Reconstruir restaurante desde ID
+	    if (reserva.getRestaurante() != null &&
+	        reserva.getRestaurante().getIdRestaurante() > 0) {
+
+	        Restaurante rest = restauranteRepository
+	                .findById(reserva.getRestaurante().getIdRestaurante())
+	                .orElse(null);
+
+	        reserva.setRestaurante(rest);
+	    }
+
+	    reserva.setUsuario(usuario);
 	    reservaService.saveReserva(reserva);
 
-	    return "redirect:/reservas";
+	    // ✔ Rutas de retorno
+	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
+	        return "redirect:/reservas";
+	    }
+
+	    return "redirect:/reservas/user";
 	}
-	
+
+
+
 	
 	@GetMapping("/reservas/updateReserva/{idReserva}")
 	public ModelAndView updateReserva(@PathVariable int idReserva) {
-		ModelAndView salida = new ModelAndView("reservas/reservaForm");
 
-		Optional<Reserva> reservaOptional = reservaRepository.findById(idReserva);
+	    ModelAndView salida = new ModelAndView("reservas/reservaForm");
 
-		if (reservaOptional.isPresent()) {
+	    Optional<Reserva> reservaOptional = reservaRepository.findById(idReserva);
 
-			salida.addObject("reserva", reservaOptional.get());
-		} else {
-			salida.setViewName("redirect:/reservas");
-		}
+	    if (reservaOptional.isPresent()) {
+	        salida.addObject("reserva", reservaOptional.get());
+	    } else {
+	        salida.setViewName("redirect:/reservas");
+	        return salida;
+	    }
 
-		return salida;
+	    // 🔥 NECESARIO para que el formulario funcione
+	    salida.addObject("restaurantes", restauranteRepository.findAll());
+
+	    return salida;
 	}
+
 	
 	
 	//para ver las reservas del usuario User:

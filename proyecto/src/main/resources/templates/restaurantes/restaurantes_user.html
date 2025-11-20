@@ -41,11 +41,13 @@
                 </td>
 
                 <td>
-                    <a class="btn btn-primary"
-                       th:href="@{/reservas/add(idRestaurante=${restaurante.idRestaurante})}">
-                       Reservar
-                    </a>
+					<a class="btn btn-primary"
+					   th:href="@{'/reservas/add/user'(idRestaurante=${restaurante.idRestaurante})}">
+					   Reservar
+					</a>
+
                 </td>
+				
             </tr>
         </tbody>
 

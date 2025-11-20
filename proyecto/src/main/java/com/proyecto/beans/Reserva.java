@@ -33,5 +33,14 @@ public class Reserva {
 	@ManyToOne
 	@JoinColumn(name = "nombre_usuario", nullable = false)
 	private Usuario usuario;
+	
+	@Override
+	public String toString() {
+	    return "Reserva{" +
+	            "idReserva=" + idReserva +
+	            ", fecha='" + fecha + '\'' +
+	            ", restaurante=" + (restaurante != null ? restaurante.getIdRestaurante() : "null") +
+	            '}';
+	}
 
 }

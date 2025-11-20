@@ -53,6 +53,15 @@ public class Restaurante {
 	@OneToOne
 	@JoinColumn(name = "nombre_usuario", referencedColumnName = "nombreUsuario")
 	private Usuario usuario;
+	
+	@Override
+	public String toString() {
+	    return "Restaurante{" +
+	            "idRestaurante=" + idRestaurante +
+	            ", nombre='" + nombre + '\'' +
+	            '}';
+	}
+
 
 
 }
