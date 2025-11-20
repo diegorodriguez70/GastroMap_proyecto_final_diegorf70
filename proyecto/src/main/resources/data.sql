@@ -21,6 +21,8 @@ INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (3, 5);
 -- PERFILES
 INSERT INTO perfil (id_perfil, tipo) VALUES (1, 'ADMIN');
 INSERT INTO perfil (id_perfil, tipo) VALUES (2, 'USER');
+INSERT INTO perfil (id_perfil, tipo) VALUES (3, 'RESTAURANTE');
+
 
 -- USUARIOS
 
