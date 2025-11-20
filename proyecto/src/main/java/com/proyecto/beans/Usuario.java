@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Usuario implements UserDetails{
@@ -35,6 +36,8 @@ public class Usuario implements UserDetails{
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reserva> reservas = new ArrayList<>();
 
+    @OneToOne(mappedBy = "usuario")
+    private Restaurante restaurante;
 
     // -------------------------------------------------------
     // SPRING SECURITY: construcción de permisos por perfil
@@ -50,12 +53,24 @@ public class Usuario implements UserDetails{
         } else if (perfil.getTipo().equalsIgnoreCase("USER")) {
             permisos.add(new SimpleGrantedAuthority("ROLE_USER"));
             permisos.add(new SimpleGrantedAuthority("PERMISO_VER"));
+        } else if (perfil.getTipo().equalsIgnoreCase("RESTAURANTE")) {
+            permisos.add(new SimpleGrantedAuthority("ROLE_RESTAURANTE"));
+            permisos.add(new SimpleGrantedAuthority("PERMISO_VER"));
         }
+
 
         return permisos;
     }
 
-    // Métodos obligatorios de UserDetails
+    public Restaurante getRestaurante() {
+		return restaurante;
+	}
+
+	public void setRestaurante(Restaurante restaurante) {
+		this.restaurante = restaurante;
+	}
+
+	// Métodos obligatorios de UserDetails
     @Override public String getPassword() { return contrasenia; }
     @Override public String getUsername() { return nombreUsuario; }
     @Override public boolean isAccountNonExpired() { return true; }
