@@ -1,5 +1,6 @@
 package com.proyecto.controllers;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +18,11 @@ import com.proyecto.beans.Cupon;
 import com.proyecto.beans.Pertenece;
 import com.proyecto.beans.PerteneceId;
 import com.proyecto.beans.Restaurante;
+import com.proyecto.beans.Usuario;
 import com.proyecto.repositories.CuponRepository;
 import com.proyecto.repositories.PerteneceRepository;
 import com.proyecto.repositories.RestauranteRepository;
+import com.proyecto.services.CustomUserDetailsService;
 import com.proyecto.services.RestauranteService;
 
 import jakarta.validation.Valid;
@@ -40,17 +43,41 @@ public class RestauranteController {
 	@Autowired
 	RestauranteService restauranteService;
 	
+	@Autowired
+	private CustomUserDetailsService userService;
 	
+//	
+//	@GetMapping("/restaurantes")
+//	public ModelAndView getRestaurantes() {
+//
+//		ModelAndView salida = new ModelAndView("restaurantes/restaurantes");
+//		Iterable<Restaurante> restaurantes = restauranteRepository.findAll();
+//
+//		salida.addObject("restaurantes", restaurantes);
+//		return salida;
+//
+//	}
 	@GetMapping("/restaurantes")
-	public ModelAndView getRestaurantes() {
+	public ModelAndView getRestaurantes(Principal principal) {
 
-		ModelAndView salida = new ModelAndView("restaurantes/restaurantes");
-		Iterable<Restaurante> restaurantes = restauranteRepository.findAll();
+	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-		salida.addObject("restaurantes", restaurantes);
-		return salida;
+	    ModelAndView mv;
 
+	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
+	        mv = new ModelAndView("restaurantes/restaurantes");
+	    } 
+	    else if (usuario.getPerfil().getTipo().equalsIgnoreCase("USER")) {
+	        mv = new ModelAndView("restaurantes/restaurantes_user");
+	    } 
+	    else { // PERFIL RESTAURANTE → lo haremos más adelante
+	        mv = new ModelAndView("restaurantes/restaurantes");
+	    }
+
+	    mv.addObject("restaurantes", restauranteRepository.findAll());
+	    return mv;
 	}
+
 
 	@GetMapping("/restaurantes/{idRestaurante}")
 	public ModelAndView getRestauranteById(@PathVariable int idRestaurante) {
@@ -179,6 +206,15 @@ public class RestauranteController {
 
 	    return "redirect:/restaurantes/" + idRestaurante + "/cupones";
 	}
+	
+	//para el usuario User
+//	@GetMapping("/restaurantes/user")
+//	public ModelAndView restaurantesUser() {
+//	    ModelAndView mv = new ModelAndView("restaurantes/restaurantes_user");
+//	    mv.addObject("restaurantes", restauranteRepository.findAll());
+//	    return mv;
+//	}
+
 
 
 
