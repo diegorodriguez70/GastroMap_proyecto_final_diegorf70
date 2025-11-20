@@ -51,8 +51,9 @@ public class Restaurante {
 	private List<Reserva> reservas = new ArrayList<>();
 	
 	@OneToOne
-	@JoinColumn(name = "nombre_usuario", referencedColumnName = "nombreUsuario")
+	@JoinColumn(name = "nombre_usuario", referencedColumnName = "nombreUsuario", nullable = true)
 	private Usuario usuario;
+
 	
 	@Override
 	public String toString() {

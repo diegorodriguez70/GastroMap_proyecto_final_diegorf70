@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.proyecto.beans.Restaurante;
 import com.proyecto.repositories.RestauranteRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class RestauranteService {
 	
@@ -24,14 +26,22 @@ public class RestauranteService {
 		return null;
 	}
 
+	@Transactional
 	public void deleteRestauranteById(int idRestaurante) {
-		try {
-			restauranteRepository.deleteById(idRestaurante);
-		}catch(Exception e) {
-			System.out.println("no existe el restaurante que quieres borrar");
-		}
-		
+	    try {
+
+	        // 🔥 Desvincular el usuario con UPDATE directo (no produce errores)
+	        restauranteRepository.desvincularUsuario(idRestaurante);
+
+	        // 🔥 Ahora sí eliminar
+	        restauranteRepository.deleteById(idRestaurante);
+
+	    } catch (Exception e) {
+	        System.out.println("Error al borrar restaurante: " + e.getMessage());
+	    }
 	}
+
+
 	public void saveRestaurante (Restaurante restaurante) {
 		
 		restauranteRepository.save(restaurante);
