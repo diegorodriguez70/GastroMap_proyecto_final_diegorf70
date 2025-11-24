@@ -30,10 +30,8 @@ public class RestauranteService {
 	public void deleteRestauranteById(int idRestaurante) {
 	    try {
 
-	        // 🔥 Desvincular el usuario con UPDATE directo (no produce errores)
 	        restauranteRepository.desvincularUsuario(idRestaurante);
 
-	        // 🔥 Ahora sí eliminar
 	        restauranteRepository.deleteById(idRestaurante);
 
 	    } catch (Exception e) {

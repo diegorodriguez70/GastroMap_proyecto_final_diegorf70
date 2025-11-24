@@ -15,5 +15,7 @@ public interface RestauranteRepository extends CrudRepository<Restaurante, Integ
 	@Transactional
 	@Query("UPDATE Restaurante r SET r.usuario = null WHERE r.idRestaurante = :id")
 	void desvincularUsuario(@Param("id") int idRestaurante);
+	
+	Restaurante findByUsuario_NombreUsuario(String nombreUsuario);
 
 }

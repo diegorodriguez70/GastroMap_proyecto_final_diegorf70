@@ -24,7 +24,6 @@ public class LoginController {
     @GetMapping({"/", "/index"})
     public String index(Principal principal) {
 
-        // Si NO hay usuario logueado → mostrar index normal
         if (principal == null) {
             return "index";
         }
@@ -35,18 +34,17 @@ public class LoginController {
             return "index";
         }
 
-        // Selección de index según el perfil
         String rol = usuario.getPerfil().getTipo().toUpperCase();
 
         switch (rol) {
             case "ADMIN":
-                return "index";  // index normal
+                return "index";  
 
             case "USER":
-                return "index_user";  // el que acabas de crear
+                return "index_user"; 
 
             case "RESTAURANTE":
-                return "index_restaurante"; // cuando lo hagamos
+                return "index_restaurante"; 
 
             default:
                 return "index";

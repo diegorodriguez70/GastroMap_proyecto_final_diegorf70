@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="navbar_restaurante">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			
+			<a class="navbar-brand text-success" th:href="@{/index}">
+				GastroMap
+			</a>
+
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+			        data-bs-target="#navbarNavRest" aria-controls="navbarNavRest"
+			        aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse justify-content-end" id="navbarNavRest">
+
+				<ul class="navbar-nav">
+
+					<!-- Reservas del restaurante logueado -->
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/reservas/rest}">
+							Reservas
+						</a>
+					</li>
+
+					<!-- Cupones del restaurante logueado -->
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/cupones/rest}">
+							Cupones
+						</a>
+					</li>
+
+					<!-- Cerrar sesión -->
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/logout}">
+							Cerrar sesión
+						</a>
+					</li>
+
+				</ul>
+			</div>
+
+		</div>
+	</nav>
+</div>
+
+</body>
+</html>

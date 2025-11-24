@@ -9,5 +9,8 @@ import com.proyecto.beans.Reserva;
 public interface ReservaRepository extends CrudRepository<Reserva, Integer>{
 
 	List<Reserva> findByUsuario_NombreUsuario(String nombreUsuario);
+	
+	List<Reserva> findByRestaurante_IdRestaurante(int idRestaurante);
+
 
 }
