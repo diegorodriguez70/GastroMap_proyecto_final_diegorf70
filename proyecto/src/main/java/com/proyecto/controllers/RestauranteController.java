@@ -70,7 +70,7 @@ public class RestauranteController {
 	    else if (usuario.getPerfil().getTipo().equalsIgnoreCase("USER")) {
 	        mv = new ModelAndView("restaurantes/restaurantes_user");
 	    } 
-	    else { // PERFIL RESTAURANTE → lo haremos más adelante
+	    else {
 	        mv = new ModelAndView("restaurantes/restaurantes");
 	    }
 
@@ -137,7 +137,7 @@ public class RestauranteController {
 	@GetMapping("/restaurantes/{idRestaurante}/cupones")
 	public ModelAndView verCuponesRestaurante(@PathVariable int idRestaurante) {
 
-	    ModelAndView salida = new ModelAndView("restaurantes/cupones_restaurante");
+	    ModelAndView salida = new ModelAndView("restaurantes/cupones_restaurante_admin");
 
 	    Optional<Restaurante> restauranteOptional = restauranteRepository.findById(idRestaurante);
 
@@ -207,13 +207,55 @@ public class RestauranteController {
 	    return "redirect:/restaurantes/" + idRestaurante + "/cupones";
 	}
 	
-	//para el usuario User
-//	@GetMapping("/restaurantes/user")
-//	public ModelAndView restaurantesUser() {
-//	    ModelAndView mv = new ModelAndView("restaurantes/restaurantes_user");
-//	    mv.addObject("restaurantes", restauranteRepository.findAll());
-//	    return mv;
-//	}
+	// ============ ADMIN: mostrar cupones NO vinculados ============
+	@GetMapping("/restaurantes/{idRestaurante}/cupones/existentes")
+	public ModelAndView verCuponesNoVinculadosAdmin(@PathVariable int idRestaurante) {
+
+	    Restaurante restaurante = restauranteRepository.findById(idRestaurante).orElse(null);
+
+	    if (restaurante == null) {
+	        return new ModelAndView("redirect:/restaurantes");
+	    }
+
+	    List<Cupon> yaVinculados = restaurante.getPertenece()
+	            .stream()
+	            .map(p -> p.getCupon())
+	            .toList();
+
+	    List<Cupon> disponibles = ((List<Cupon>) cuponRepository.findAll())
+	            .stream()
+	            .filter(c -> !yaVinculados.contains(c))
+	            .toList();
+
+	    ModelAndView mv = new ModelAndView("restaurantes/cupones_existentes_admin");
+	    mv.addObject("cupones", disponibles);
+	    mv.addObject("restaurante", restaurante);
+
+	    return mv;
+	}
+
+	// ============ USER: ver cupones de un restaurante ============
+	@GetMapping("/restaurantes/{idRestaurante}/cupones/user")
+	public ModelAndView verCuponesRestauranteUser(@PathVariable int idRestaurante) {
+
+	    Restaurante restaurante = restauranteRepository.findById(idRestaurante).orElse(null);
+
+	    if (restaurante == null) {
+	        return new ModelAndView("redirect:/restaurantes");
+	    }
+
+	    List<Cupon> cupones = restaurante.getPertenece()
+	            .stream()
+	            .map(p -> p.getCupon())
+	            .toList();
+
+	    ModelAndView mv = new ModelAndView("restaurantes/cupones_restaurante_user");
+	    mv.addObject("cupones", cupones);
+	    mv.addObject("restaurante", restaurante);
+
+	    return mv;
+	}
+
 
 
 

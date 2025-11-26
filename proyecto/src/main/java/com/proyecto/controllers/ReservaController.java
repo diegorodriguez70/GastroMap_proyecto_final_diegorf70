@@ -204,63 +204,106 @@ public class ReservaController {
 	        }
 	    }
 
-	    // Si hay errores de otros campos
+	    // Si hay errores
 	    if (result.hasErrors()) {
 
 	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
 	            return "reservas/reservaForm";
 	        }
 
+	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
+	            return "reservas/reservaForm_rest";
+	        }
+
 	        return "reservas/reservaForm_user";
 	    }
 
-	    // ✔ Reconstruir restaurante desde ID
-	    if (reserva.getRestaurante() != null &&
-	        reserva.getRestaurante().getIdRestaurante() > 0) {
+	    // ============================================
+	    // 👇 Protección especial para RESTAURANTE
+	    // Siempre asignar SU restaurante real
+	    // ============================================
+	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
 
-	        Restaurante rest = restauranteRepository
-	                .findById(reserva.getRestaurante().getIdRestaurante())
-	                .orElse(null);
+	        Restaurante restaurante = restauranteRepository
+	                .findByUsuario_NombreUsuario(usuario.getNombreUsuario());
 
-	        reserva.setRestaurante(rest);
+	        reserva.setRestaurante(restaurante);
+	    } else {
+	        // ADMIN o USER → reconstruir restaurante desde ID
+	        if (reserva.getRestaurante() != null &&
+	                reserva.getRestaurante().getIdRestaurante() > 0) {
+
+	            Restaurante rest = restauranteRepository
+	                    .findById(reserva.getRestaurante().getIdRestaurante())
+	                    .orElse(null);
+
+	            reserva.setRestaurante(rest);
+	        }
 	    }
 
+	    // Guardamos usuario que crea la reserva
 	    reserva.setUsuario(usuario);
 	    reservaService.saveReserva(reserva);
 
-	    // ✔ Rutas de retorno
+	    // ============================================
+	    // Redirecciones según rol
+	    // ============================================
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
 	        return "redirect:/reservas";
 	    }
+
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
 	        return "redirect:/reservas/rest";
 	    }
-
 
 	    return "redirect:/reservas/user";
 	}
 
 
 
-	
+
+
 	@GetMapping("/reservas/updateReserva/{idReserva}")
-	public ModelAndView updateReserva(@PathVariable int idReserva) {
+	public ModelAndView updateReserva(
+	        @PathVariable int idReserva,
+	        Principal principal) {
 
-	    ModelAndView salida = new ModelAndView("reservas/reservaForm");
+	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
+	    Optional<Reserva> optional = reservaRepository.findById(idReserva);
 
-	    Optional<Reserva> reservaOptional = reservaRepository.findById(idReserva);
-
-	    if (reservaOptional.isPresent()) {
-	        salida.addObject("reserva", reservaOptional.get());
-	    } else {
-	        salida.setViewName("redirect:/reservas");
-	        return salida;
+	    if (optional.isEmpty()) {
+	        return new ModelAndView("redirect:/reservas");
 	    }
 
-	    salida.addObject("restaurantes", restauranteRepository.findAll());
+	    Reserva reserva = optional.get();
 
-	    return salida;
+	    // ======================================
+	    // CASO RESTAURANTE
+	    // ======================================
+	    if (usuario.getPerfil().getTipo().equals("RESTAURANTE")) {
+
+	        Restaurante restaurante = restauranteRepository
+	                .findByUsuario_NombreUsuario(usuario.getNombreUsuario());
+
+	        // Evitar editar reservas de OTRO restaurante
+	        if (reserva.getRestaurante().getIdRestaurante() != restaurante.getIdRestaurante()) {
+	            return new ModelAndView("redirect:/reservas/rest");
+	        }
+
+	        ModelAndView mv = new ModelAndView("reservas/reservaForm_rest");
+	        mv.addObject("reserva", reserva);
+	        return mv;
+	    }
+
+	    // ======================================
+	    // CASO ADMIN
+	    // ======================================
+	    ModelAndView mv = new ModelAndView("reservas/reservaForm");
+	    mv.addObject("reserva", reserva);
+	    mv.addObject("restaurantes", restauranteRepository.findAll());
+	    return mv;
 	}
+
 
 	
 	
