@@ -43,11 +43,11 @@ INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto, nombre_us
 VALUES ('Azurmendi', 'Larrabetzu, España', 'Cocina vasca', 'Martes a Sábado: 13:00–15:30', '+34 946 54 22 42', 'rest_azurmendi');
 
 -- CUPONES
-INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('1 semana', 10.0);
-INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('2 semanas', 15.0);
-INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('1 mes', 20.0);
-INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('3 meses', 25.0);
-INSERT INTO cupon (tiempo_duracion, descuento) VALUES ('6 meses', 30.0);
+INSERT INTO cupon (tiempo_duracion, descuento, codigo) VALUES ('1 semana', 10.0, '634789');
+INSERT INTO cupon (tiempo_duracion, descuento, codigo) VALUES ('2 semanas', 15.0, '154370');
+INSERT INTO cupon (tiempo_duracion, descuento, codigo) VALUES ('1 mes', 20.0, '089768');
+INSERT INTO cupon (tiempo_duracion, descuento, codigo) VALUES ('3 meses', 25.0, '245611');
+INSERT INTO cupon (tiempo_duracion, descuento, codigo) VALUES ('6 meses', 30.0, '365769');
 
 -- PERTENECE
 INSERT INTO pertenece (id_restaurante, id_cupon) VALUES (1, 1);

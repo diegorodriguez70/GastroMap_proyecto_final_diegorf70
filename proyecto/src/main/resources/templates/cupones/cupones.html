@@ -17,6 +17,7 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
+				<th scope="col">Código</th>
                 <th scope="col">Tiempo de Duración</th>
                 <th scope="col">Descuento</th>
 				<th scope="col"></th>
@@ -26,6 +27,7 @@
         <tbody>
             <tr th:each="cupon : ${cupones}">
                 <td th:text="${cupon.idCupon}"></td>
+				<td th:text="${cupon.codigo}"></td>
                 <td th:text="${cupon.tiempoDuracion}"></td>
                 <td th:text="${cupon.descuento} + '%'"></td>
 				<td>

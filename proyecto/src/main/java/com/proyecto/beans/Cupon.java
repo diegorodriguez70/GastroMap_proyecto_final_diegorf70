@@ -25,6 +25,7 @@ public class Cupon {
 	private int idCupon;
 	private String tiempoDuracion;
 	private BigDecimal descuento;
+	private String codigo;
 	
 	@OneToMany(mappedBy = "cupon", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<Pertenece> pertenece = new ArrayList<>();

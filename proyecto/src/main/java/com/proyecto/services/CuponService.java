@@ -14,6 +14,12 @@ public class CuponService {
 	@Autowired
 	CuponRepository cuponRepository;
 	
+	private String generarCodigo() {
+        return String.valueOf((int)(Math.random() * 900000) + 100000);
+    }
+	
+	
+	
 	public Optional<Cupon> getCuponOptionalById(int idCupon){
 		
 		Optional<Cupon> cuponOptional = cuponRepository.findById(idCupon);
@@ -32,17 +38,24 @@ public class CuponService {
 		}
 		
 	}
-	public void saveCupon (Cupon cupon) {
-		
-		cuponRepository.save(cupon);
-	}
 	
-	/*public void updateCuponById(int idCupon) {
-		
-		Optional<Cupon> cupon = cuponRepository.findById(idCupon);
-		if(cupon.isPresent()) {
-			
-			
-		}
-	}*/
+	
+	
+	public void saveCupon(Cupon cupon) {
+
+        if (cupon.getCodigo() == null || cupon.getCodigo().isBlank()) {
+
+            String codigo;
+
+            do {
+                codigo = generarCodigo();
+            } while (cuponRepository.existsByCodigo(codigo));
+
+            cupon.setCodigo(codigo);
+        }
+
+        cuponRepository.save(cupon);
+    }
+
+
 }
