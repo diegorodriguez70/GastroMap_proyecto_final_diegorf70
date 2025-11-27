@@ -26,5 +26,8 @@ public interface PerteneceRepository extends CrudRepository<Pertenece, Pertenece
     @Transactional
     @Query("DELETE FROM Pertenece p WHERE p.id.idRestaurante = :idRestaurante")
     void deleteByIdIdRestaurante(@Param("idRestaurante") int idRestaurante);
+    
+
+
 
 }
