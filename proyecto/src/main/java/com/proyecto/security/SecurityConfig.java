@@ -25,10 +25,12 @@ public class SecurityConfig {
 		        .authenticationProvider(authenticationProvider(customUserDetailsService))
 	
 		        .authorizeHttpRequests(auth -> auth
-		            .requestMatchers("/login", "/css/**", "/js/**", "/images/**").permitAll()
-		            .requestMatchers("/admin/**").hasRole("ADMIN")
-		            .anyRequest().authenticated()
-		        )
+		        	    .requestMatchers("/login", "/addUsuario", "/saveUsuario", //añadido el addUsuario y saveUsuario para poder crear usuario sin permisos
+		        	                     "/css/**", "/js/**", "/images/**").permitAll()
+		        	    .requestMatchers("/admin/**").hasRole("ADMIN")
+		        	    .anyRequest().authenticated()
+	        	)
+
 	
 		        .formLogin(form -> form
 		            .loginPage("/login")
