@@ -1,6 +1,7 @@
 package com.proyecto.controllers;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -204,6 +205,18 @@ public class ReservaController {
 	        }
 	    }
 
+	    // ============================================
+	    // ✔ VALIDACIÓN FECHA PASADA
+	    // ============================================
+	    try {
+	        LocalDateTime fecha = LocalDateTime.parse(reserva.getFecha());
+	        if (fecha.isBefore(LocalDateTime.now())) {
+	            result.rejectValue("fecha", "error.fecha", "No puedes reservar una fecha pasada");
+	        }
+	    } catch (Exception e) {
+	        result.rejectValue("fecha", "error.fecha", "Formato de fecha inválido");
+	    }
+
 	    // Si hay errores
 	    if (result.hasErrors()) {
 
@@ -220,7 +233,6 @@ public class ReservaController {
 
 	    // ============================================
 	    // 👇 Protección especial para RESTAURANTE
-	    // Siempre asignar SU restaurante real
 	    // ============================================
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
 
@@ -229,7 +241,6 @@ public class ReservaController {
 
 	        reserva.setRestaurante(restaurante);
 	    } else {
-	        // ADMIN o USER → reconstruir restaurante desde ID
 	        if (reserva.getRestaurante() != null &&
 	                reserva.getRestaurante().getIdRestaurante() > 0) {
 
@@ -241,7 +252,6 @@ public class ReservaController {
 	        }
 	    }
 
-	    // Guardamos usuario que crea la reserva
 	    reserva.setUsuario(usuario);
 	    reservaService.saveReserva(reserva);
 
