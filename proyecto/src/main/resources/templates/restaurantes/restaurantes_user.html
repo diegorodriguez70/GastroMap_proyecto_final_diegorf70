@@ -17,6 +17,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
+				<th>Ubicación</th>
                 <th>Contacto</th>
                 <th>Horarios</th>
                 <th>Carta</th>
@@ -29,6 +30,7 @@
             <tr th:each="restaurante : ${restaurantes}">
                 <td th:text="${restaurante.idRestaurante}"></td>
                 <td th:text="${restaurante.nombre}"></td>
+				<td th:text="${restaurante.ubicacion}"></td>
                 <td th:text="${restaurante.contacto}"></td>
                 <td th:text="${restaurante.horarios}"></td>
                 <td th:text="${restaurante.carta}"></td>

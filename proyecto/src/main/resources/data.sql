@@ -12,35 +12,35 @@ VALUES ('user', 'Usuario Normal', 'user', 2);
 
 -- USUARIOS DE RESTAURANTE
 INSERT INTO usuario (nombre_usuario, nombre, contrasenia, id_perfil)
-VALUES ('rest_celler', 'Celler Manager', 'rest_celler', 3);
+VALUES ('rest_rekondo', 'Rekondo Manager', 'rest_rekondo', 3);
 
 INSERT INTO usuario (nombre_usuario, nombre, contrasenia, id_perfil)
-VALUES ('rest_disfrutar', 'Disfrutar Manager', 'rest_disfrutar', 3);
+VALUES ('rest_casa_marcos', 'Casa Marcos Manager', 'rest_casa_marcos', 3);
 
 INSERT INTO usuario (nombre_usuario, nombre, contrasenia, id_perfil)
-VALUES ('rest_diverxo', 'DiverXO Manager', 'rest_diverxo', 3);
+VALUES ('rest_casa_gerardo', 'Casa Gerardo Manager', 'rest_casa_gerardo', 3);
 
 INSERT INTO usuario (nombre_usuario, nombre, contrasenia, id_perfil)
-VALUES ('rest_aponiente', 'Aponiente Manager', 'rest_aponiente', 3);
+VALUES ('rest_augusto', 'Augusto Manager', 'rest_augusto', 3);
 
 INSERT INTO usuario (nombre_usuario, nombre, contrasenia, id_perfil)
-VALUES ('rest_azurmendi', 'Azurmendi Manager', 'rest_azurmendi', 3);
+VALUES ('rest_laparrilla', 'La Parrilla Manager', 'rest_laparrilla', 3);
 
--- RESTAURANTES (ya podemos referenciar nombre_usuario)
+-- RESTAURANTES
 INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto, nombre_usuario)
-VALUES ('El Celler de Can Roca', 'Girona, España', 'Cocina de vanguardia', 'Lunes a Sábado: 12:30–15:30', '+34 972 222 157', 'rest_celler');
-
-INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto, nombre_usuario)
-VALUES ('Disfrutar', 'Barcelona, España', 'Cocina moderna', 'Martes a Sábado: 13:00–16:00', '+34 933 486 896', 'rest_disfrutar');
+VALUES ('Rekondo', 'Oviedo', 'Cocina asturiana tradicional', 'Lunes a Domingo: 13:00–23:00', '+34 985 222 157', 'rest_rekondo');
 
 INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto, nombre_usuario)
-VALUES ('DiverXO', 'Madrid, España', 'Cocina de autor', 'Miércoles a Sábado: 13:30–16:00', '+34 915 30 85 11', 'rest_diverxo');
+VALUES ('Casa Marcos', 'Gijón', 'Cocina casera y parrilla', 'Martes a Domingo: 13:00–23:00', '+34 985 486 896', 'rest_casa_marcos');
 
 INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto, nombre_usuario)
-VALUES ('Aponiente', 'El Puerto de Santa María, España', 'Cocina marinera', 'Martes a Sábado: 13:30–15:30', '+34 956 83 50 10', 'rest_aponiente');
+VALUES ('Casa Gerardo', 'Prendes', 'Cocina de autor asturiana', 'Miércoles a Domingo: 13:00–22:00', '+34 985 30 85 11', 'rest_casa_gerardo');
 
 INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto, nombre_usuario)
-VALUES ('Azurmendi', 'Larrabetzu, España', 'Cocina vasca', 'Martes a Sábado: 13:00–15:30', '+34 946 54 22 42', 'rest_azurmendi');
+VALUES ('Augusto', 'Avilés', 'Cocina marinera', 'Martes a Sábado: 13:30–15:30', '+34 985 83 50 10', 'rest_augusto');
+
+INSERT INTO restaurante (nombre, ubicacion, carta, horarios, contacto, nombre_usuario)
+VALUES ('La Parrilla de Mieres', 'Mieres', 'Parrilla y carne a la brasa', 'Martes a Sábado: 13:00–15:30', '+34 985 54 22 42', 'rest_laparrilla');
 
 -- CUPONES
 INSERT INTO cupon (tiempo_duracion, descuento, codigo) VALUES ('1 semana', 10.0, '634789');
