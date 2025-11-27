@@ -25,6 +25,12 @@
             <div th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}" class="text-danger"></div>
         </div>
 
+       <div class="mb-3">
+           <label for="comensales" class="form-label">Comensales:</label>
+           <input type="number" min="1" class="form-control" id="comensales" th:field="*{comensales}" />
+           <div th:if="${#fields.hasErrors('comensales')}" th:errors="*{comensales}" class="text-danger"></div>
+       </div>
+  
         <div class="mb-3">
             <label for="restaurante" class="form-label">Restaurante:</label>
 

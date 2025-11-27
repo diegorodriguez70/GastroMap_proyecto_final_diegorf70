@@ -20,16 +20,18 @@
         <thead class="table-dark text-center">
             <tr>
                 <th>ID</th>
+				<th>Número de comensales</th>
                 <th>Fecha</th>
                 <th>Cliente</th>
-                <th></th> <!-- borrar -->
-                <th></th> <!-- editar -->
+                <th></th> 
+                <th></th> 
             </tr>
         </thead>
 
         <tbody>
             <tr th:each="reserva : ${reservas}" class="align-middle text-center">
                 <td th:text="${reserva.idReserva}"></td>
+				<td th:text="${reserva.comensales}"></td>
 
                 <td th:text="${reserva.fecha}"></td>
 

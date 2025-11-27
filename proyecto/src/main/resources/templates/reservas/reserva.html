@@ -20,6 +20,8 @@
         <p><strong>Restaurante:</strong> 
             <span th:text="${reserva.restaurante != null ? reserva.restaurante.nombre : 'Sin restaurante'}"></span>
         </p>
+
+		<p><strong>Número de comensales:</strong> <span th:text="${reserva.comensales}"></span></p>
     </div>
 
     <div th:unless="${reserva}" class="alert alert-danger">

@@ -33,6 +33,11 @@
             <input type="datetime-local" class="form-control" id="fecha" th:field="*{fecha}" />
             <div th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}" class="text-danger"></div>
         </div>
+		<div class="mb-3">
+		     <label for="comensales" class="form-label">Comensales:</label>
+		     <input type="number" min="1" class="form-control" id="comensales" th:field="*{comensales}" />
+		     <div th:if="${#fields.hasErrors('comensales')}" th:errors="*{comensales}" class="text-danger"></div>
+		 </div>
 
         <button type="submit" class="btn btn-primary">Guardar reserva</button>
         <a th:href="@{/reservas}" class="btn btn-secondary">Cancelar</a>

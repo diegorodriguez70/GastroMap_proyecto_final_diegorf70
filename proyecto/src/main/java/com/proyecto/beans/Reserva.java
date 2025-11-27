@@ -25,6 +25,7 @@ public class Reserva {
 	
 	private String fecha;
 	
+	private int comensales;
 	
 	@ManyToOne
     @JoinColumn(name = "idRestaurante", nullable = false)

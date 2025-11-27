@@ -22,6 +22,11 @@
             <input type="text" class="form-control" id="fecha" th:field="*{fecha}" />
             <div th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}" class="text-danger"></div>
         </div>
+		<div class="mb-3">
+		     <label for="comensales" class="form-label">Comensales:</label>
+		     <input type="number" min="1" class="form-control" id="comensales" th:field="*{comensales}" />
+		     <div th:if="${#fields.hasErrors('comensales')}" th:errors="*{comensales}" class="text-danger"></div>
+		 </div>
 
         <p class="mt-3">
             Restaurante seleccionado:

@@ -18,6 +18,8 @@
                 <th>ID</th>
                 <th>Fecha</th>
                 <th>Restaurante</th>
+				<th>Numero de comensales</th>
+								
             </tr>
         </thead>
 
@@ -26,6 +28,8 @@
                 <td th:text="${reserva.idReserva}"></td>
                 <td th:text="${reserva.fecha}"></td>
                 <td th:text="${reserva.restaurante.nombre}"></td>
+				<td th:text="${reserva.comensales}"></td>
+								
             </tr>
         </tbody>
     </table>

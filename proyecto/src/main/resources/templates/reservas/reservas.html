@@ -17,6 +17,7 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">ID</th>
+				<th scope="col">Número de comensales</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Restaurante</th>
 				<th scope="col"></th>
@@ -26,6 +27,7 @@
         <tbody>
             <tr th:each="reserva : ${reservas}">
                 <td th:text="${reserva.idReserva}"></td>
+				<td th:text="${reserva.comensales}"></td>
                 <td th:text="${reserva.fecha}"></td>
                 <td th:text="${reserva.restaurante != null ? reserva.restaurante.nombre : 'Sin restaurante'}"></td>
 				<td>
