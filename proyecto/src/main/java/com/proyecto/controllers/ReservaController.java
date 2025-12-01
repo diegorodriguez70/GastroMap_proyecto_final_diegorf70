@@ -27,6 +27,7 @@ import com.proyecto.services.CuponService;
 import com.proyecto.services.CustomUserDetailsService;
 import com.proyecto.services.ReservaService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @Controller
@@ -188,25 +189,26 @@ public class ReservaController {
 	public String saveReserva(
 	        @Valid @ModelAttribute Reserva reserva,
 	        BindingResult result,
-	        Principal principal) {
+	        Principal principal,
+	        HttpServletRequest request) {
 
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-	    // ❗ Validación adicional: el restaurante no puede ser -1
+	    // Validación adicional: el restaurante no puede ser -1
 	    if (reserva.getRestaurante() != null &&
-	        reserva.getRestaurante().getIdRestaurante() == -1) {
+	            reserva.getRestaurante().getIdRestaurante() == -1) {
 
 	        result.rejectValue("restaurante", "error.restaurante", "Debes seleccionar un restaurante");
 
 	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
+	            request.setAttribute("restaurantes", restauranteRepository.findAll());
 	            return "reservas/reservaForm";
-	        } else {
-	            return "reservas/reservaForm_user";
 	        }
+	        return "reservas/reservaForm_user";
 	    }
 
 	    // ============================================
-	    // ✔ VALIDACIÓN FECHA PASADA
+	    //  VALIDACIÓN FECHA PASADA
 	    // ============================================
 	    try {
 	        LocalDateTime fecha = LocalDateTime.parse(reserva.getFecha());
@@ -217,22 +219,38 @@ public class ReservaController {
 	        result.rejectValue("fecha", "error.fecha", "Formato de fecha inválido");
 	    }
 
+	    // ============================================
 	    // Si hay errores
+	    // ============================================
+
 	    if (result.hasErrors()) {
 
 	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
+	            request.setAttribute("restaurantes", restauranteRepository.findAll());
 	            return "reservas/reservaForm";
 	        }
 
 	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
+	            Restaurante restaurante = restauranteRepository
+	                    .findByUsuario_NombreUsuario(usuario.getNombreUsuario());
+	            request.setAttribute("restaurante", restaurante);
 	            return "reservas/reservaForm_rest";
+	        }
+
+	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("USER")) {
+	            Restaurante restaurante = restauranteRepository
+	                    .findById(reserva.getRestaurante().getIdRestaurante())
+	                    .orElse(null);
+	            request.setAttribute("restaurante", restaurante);
+	            return "reservas/reservaForm_user";
 	        }
 
 	        return "reservas/reservaForm_user";
 	    }
 
+
 	    // ============================================
-	    // 👇 Protección especial para RESTAURANTE
+	    //  Protección especial para RESTAURANTE
 	    // ============================================
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
 
@@ -240,6 +258,7 @@ public class ReservaController {
 	                .findByUsuario_NombreUsuario(usuario.getNombreUsuario());
 
 	        reserva.setRestaurante(restaurante);
+
 	    } else {
 	        if (reserva.getRestaurante() != null &&
 	                reserva.getRestaurante().getIdRestaurante() > 0) {
@@ -256,7 +275,7 @@ public class ReservaController {
 	    reservaService.saveReserva(reserva);
 
 	    // ============================================
-	    // Redirecciones según rol
+	    // Redirección según rol
 	    // ============================================
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
 	        return "redirect:/reservas";

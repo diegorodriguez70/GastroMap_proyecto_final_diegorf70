@@ -88,15 +88,6 @@ public class CuponController {
 
 	}
 
-//	@PostMapping("/cupones/saveCupon")
-//	public String saveCupon(@Valid @ModelAttribute Cupon cupon, BindingResult result) {
-//
-//		if (result.hasErrors()) {
-//			return "cupones/cuponForm";
-//		}
-//		cuponService.saveCupon(cupon);
-//		return "redirect:/cupones";
-//	}
 	@PostMapping("/cupones/saveCupon")
 	public String saveCupon(
 	        @Valid @ModelAttribute Cupon cupon,

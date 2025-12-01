@@ -46,17 +46,7 @@ public class RestauranteController {
 	@Autowired
 	private CustomUserDetailsService userService;
 	
-//	
-//	@GetMapping("/restaurantes")
-//	public ModelAndView getRestaurantes() {
-//
-//		ModelAndView salida = new ModelAndView("restaurantes/restaurantes");
-//		Iterable<Restaurante> restaurantes = restauranteRepository.findAll();
-//
-//		salida.addObject("restaurantes", restaurantes);
-//		return salida;
-//
-//	}
+
 	@GetMapping("/restaurantes")
 	public ModelAndView getRestaurantes(Principal principal) {
 
@@ -179,13 +169,13 @@ public class RestauranteController {
 	public String addCuponToRestaurante(@PathVariable int idRestaurante,
 	                                    @ModelAttribute("idCupon") int idCupon) {
 
-	    // 1) Comprobar si ya existe la relación
+	    // 1 Comprobar si ya existe la relación
 	    boolean existe = perteneceRepository
 	            .existsByIdIdCuponAndIdIdRestaurante(idCupon, idRestaurante);
 
 	    if (!existe) {
 
-	        // 2) Cargar objetos completos
+	        // 2 Cargar objetos completos
 	        Restaurante restaurante = restauranteRepository.findById(idRestaurante).orElse(null);
 	        Cupon cupon = cuponRepository.findById(idCupon).orElse(null);
 
@@ -193,13 +183,13 @@ public class RestauranteController {
 	            return "redirect:/restaurantes"; // por si acaso
 	        }
 
-	        // 3) Crear la relación
+	        // 3 Crear la relación
 	        PerteneceId id = new PerteneceId(idRestaurante, idCupon);
 
 	        Pertenece p = new Pertenece();
 	        p.setId(id);
-	        p.setRestaurante(restaurante);  // ✔ necesario
-	        p.setCupon(cupon);              // ✔ necesario
+	        p.setRestaurante(restaurante);  
+	        p.setCupon(cupon);              
 
 	        perteneceRepository.save(p);
 	    }
