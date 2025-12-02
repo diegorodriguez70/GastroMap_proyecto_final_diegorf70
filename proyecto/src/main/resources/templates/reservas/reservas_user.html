@@ -21,7 +21,7 @@
                 <th>Restaurante</th>
                 <th>Número de comensales</th>
                 <th></th>
-                <th></th>
+                
             </tr>
         </thead>
 
@@ -32,7 +32,7 @@
                 <td th:text="${reserva.restaurante.nombre}"></td>
                 <td th:text="${reserva.comensales}"></td>
 
-                <!-- Botón borrar -->
+          
                 <td>
                     <a class="btn btn-sm btn-danger"
                        th:href="@{'/reservas/delete/' + ${reserva.idReserva}}">
@@ -40,13 +40,7 @@
                     </a>
                 </td>
 
-                <!-- Botón editar -->
-                <td>
-                    <a class="btn btn-sm btn-warning"
-                       th:href="@{'/reservas/updateReserva/' + ${reserva.idReserva}}">
-                        <i class="bi bi-pencil-square"></i>
-                    </a>
-                </td>
+
             </tr>
         </tbody>
     </table>
