@@ -19,7 +19,7 @@ public class Perfil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idPerfil;
 
-    private String tipo;   // ADMIN o USER
+    private String tipo;   
 
     @OneToMany(mappedBy = "perfil", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Usuario> usuarios = new ArrayList<>();

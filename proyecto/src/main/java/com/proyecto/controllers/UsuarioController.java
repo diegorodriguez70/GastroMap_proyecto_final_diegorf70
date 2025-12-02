@@ -24,6 +24,16 @@ public class UsuarioController {
     @Autowired
     PerfilRepository perfilRepository;
     
+    
+    @GetMapping("/usuarios")
+    public ModelAndView listarUsuarios() {
+        ModelAndView mv = new ModelAndView("usuarios/usuarios");
+        mv.addObject("usuarios", usuarioRepository.findAll());
+        return mv;
+    }
+    
+    
+    
     @GetMapping("/addUsuario")
     public ModelAndView formCrearUsuario() {
         ModelAndView modelAndView = new ModelAndView("usuarios/usuarioForm");
