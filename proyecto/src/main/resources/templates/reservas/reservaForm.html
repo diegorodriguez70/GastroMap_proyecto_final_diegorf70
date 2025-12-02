@@ -33,7 +33,7 @@
 
        <div class="mb-3">
            <label for="comensales" class="form-label">Comensales:</label>
-           <input type="number" min="1" class="form-control" id="comensales" th:field="*{comensales}" />
+           <input type="number" min="1" max="20" class="form-control" id="comensales" th:field="*{comensales}" />
            <div th:if="${#fields.hasErrors('comensales')}" th:errors="*{comensales}" class="text-danger"></div>
        </div>
   
