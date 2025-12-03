@@ -282,5 +282,20 @@ public class CuponController {
 	}
 	
 	
+	@GetMapping("/cupones/endAll")
+	public ModelAndView terminarTodosLosCupones() {
+
+	    List<Cupon> cupones = (List<Cupon>) cuponRepository.findAll();
+
+	    for (Cupon cupon : cupones) {
+	        cupon.setTiempoDuracion("Terminado");
+	        cupon.setCodigo("-");
+	    }
+
+	    cuponRepository.saveAll(cupones);
+
+	    return new ModelAndView("redirect:/usuarios");
+	}
+
 
 }

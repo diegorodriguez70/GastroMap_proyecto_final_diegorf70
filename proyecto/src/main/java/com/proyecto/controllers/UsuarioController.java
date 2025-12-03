@@ -97,7 +97,7 @@ public class UsuarioController {
     @GetMapping("/usuarios/update/{nombreUsuario}")
     public ModelAndView updateUsuario(@PathVariable String nombreUsuario) {
 
-        ModelAndView mv = new ModelAndView("usuarios/usuarioEditForm");
+        ModelAndView modelAndView = new ModelAndView("usuarios/usuarioEditForm");
 
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(nombreUsuario);
 
@@ -106,9 +106,9 @@ public class UsuarioController {
             return new ModelAndView("redirect:/usuarios?error=UsuarioNoEncontrado");
         }
 
-        mv.addObject("usuario", usuarioOptional.get());
+        modelAndView.addObject("usuario", usuarioOptional.get());
 
-        return mv;
+        return modelAndView;
     }
 
     @PostMapping("/usuarios/update")

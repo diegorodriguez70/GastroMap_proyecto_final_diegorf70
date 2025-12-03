@@ -34,7 +34,6 @@
 				<td th:text="${usuario.perfil.tipo}"></td>
 								
 
-                <!-- Botón borrar -->
               
 				<!-- Botón borrar SOLO si el tipo es USER -->
 				<td th:if="${usuario.perfil.tipo == 'USER'}">
@@ -46,7 +45,7 @@
 
 				<td th:if="${usuario.perfil.tipo != 'USER'}"></td> <!-- Celda vacía para mantener columnas -->
 
-                <!-- Botón editar -->
+         
                 <td>
                     <a class="btn btn-sm btn-warning"
                        th:href="@{'/usuarios/update/' + ${usuario.nombreUsuario}}">
@@ -57,10 +56,23 @@
         </tbody>
     </table>
 
-    <!-- Botón agregar -->
+   
     <a class="btn btn-success mb-3" th:href="@{/usuarios/add}">
         Añadir usuario
     </a>
+
+	<a class="btn btn-info mb-3" 
+	   href="https://accounts.google.com/ServiceLogin?Email=gastromap.contacto@gmail.com"
+	   target="_blank">
+	    <i class="bi bi-envelope-fill"></i>
+	</a>
+	
+	<a class="btn btn-danger mb-3"
+	   th:href="@{/cupones/endAll}">
+	    Terminar todos los cupones
+	</a>
+
+
 
 </div>
 
