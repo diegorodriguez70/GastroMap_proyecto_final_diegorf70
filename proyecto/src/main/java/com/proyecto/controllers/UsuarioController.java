@@ -1,5 +1,7 @@
 package com.proyecto.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -89,4 +91,50 @@ public class UsuarioController {
         return new ModelAndView("redirect:/usuarios");
     }
 
+    
+
+
+    @GetMapping("/usuarios/update/{nombreUsuario}")
+    public ModelAndView updateUsuario(@PathVariable String nombreUsuario) {
+
+        ModelAndView mv = new ModelAndView("usuarios/usuarioEditForm");
+
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(nombreUsuario);
+
+        if (usuarioOptional.isEmpty()) {
+         
+            return new ModelAndView("redirect:/usuarios?error=UsuarioNoEncontrado");
+        }
+
+        mv.addObject("usuario", usuarioOptional.get());
+
+        return mv;
+    }
+
+    @PostMapping("/usuarios/update")
+    public ModelAndView saveUpdatedUsuario(
+            @Valid @ModelAttribute Usuario usuario,
+            BindingResult result) {
+
+        if (result.hasErrors()) {
+            return new ModelAndView("usuarios/usuarioEditForm");
+        }
+
+        Optional<Usuario> optionalOriginal = usuarioRepository.findById(usuario.getNombreUsuario());
+
+        if (optionalOriginal.isEmpty()) {
+            return new ModelAndView("redirect:/usuarios?error=UsuarioNoEncontrado");
+        }
+
+        Usuario original = optionalOriginal.get();
+
+       
+        usuario.setPerfil(original.getPerfil());
+
+        usuarioRepository.save(usuario);
+
+        return new ModelAndView("redirect:/usuarios");
+    }
+
+    
 }
