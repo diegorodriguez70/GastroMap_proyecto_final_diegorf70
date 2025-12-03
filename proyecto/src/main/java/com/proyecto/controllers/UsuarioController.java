@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -63,4 +64,29 @@ public class UsuarioController {
 
         return new ModelAndView("redirect:/login");
     }
+    
+    
+    
+    @GetMapping("/usuarios/delete/{nombreUsuario}")
+    public ModelAndView borrarUsuario(@PathVariable String nombreUsuario) {
+
+        // Buscar usuario
+        Usuario usuario = usuarioRepository.findById(nombreUsuario).orElse(null);
+
+        if (usuario != null) {
+
+            //  NO permitir borrar admins
+            if (usuario.getPerfil() != null && 
+                "ADMIN".equalsIgnoreCase(usuario.getPerfil().getTipo())) {
+
+             
+                return new ModelAndView("redirect:/usuarios?error=NoSePuedeBorrarAdmin");
+            }
+
+            usuarioRepository.deleteById(nombreUsuario);
+        }
+
+        return new ModelAndView("redirect:/usuarios");
+    }
+
 }

@@ -35,12 +35,16 @@
 								
 
                 <!-- Botón borrar -->
-                <td>
-                    <a class="btn btn-sm btn-danger"
-                       th:href="@{'/usuarios/delete/' + ${usuario.nombreUsuario}}">
-                        <i class="bi bi-trash"></i>
-                    </a>
-                </td>
+              
+				<!-- Botón borrar SOLO si el tipo es USER -->
+				<td th:if="${usuario.perfil.tipo == 'USER'}">
+				    <a class="btn btn-sm btn-danger"
+				       th:href="@{'/usuarios/delete/' + ${usuario.nombreUsuario}}">
+				        <i class="bi bi-trash"></i>
+				    </a>
+				</td>
+
+				<td th:if="${usuario.perfil.tipo != 'USER'}"></td> <!-- Celda vacía para mantener columnas -->
 
                 <!-- Botón editar -->
                 <td>
