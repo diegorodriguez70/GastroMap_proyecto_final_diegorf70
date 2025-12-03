@@ -1,10 +1,12 @@
 package com.proyecto.controllers;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.proyecto.beans.Cupon;
@@ -246,8 +250,77 @@ public class RestauranteController {
 	    return mv;
 	}
 
+	
+	
+	
+	
+	
 
+	
+	@GetMapping("/restaurantes/carta/{id}")
+	public ResponseEntity<byte[]> verCarta(@PathVariable Integer id) {
 
+	    Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
 
+	    if (restauranteOptional.isEmpty()) {
+	        return ResponseEntity.notFound().build();
+	    }
+
+	    Restaurante restaurante = restauranteOptional.get();
+
+	    byte[] pdfBytes = restaurante.getCartaPdf();
+
+	    if (pdfBytes == null || pdfBytes.length == 0) {
+	        return ResponseEntity.noContent().build();
+	    }
+
+	    return ResponseEntity
+	            .ok()
+	            .header("Content-Type", "application/pdf")
+	            .header("Content-Disposition", "inline; filename=carta_" + id + ".pdf")
+	            .body(pdfBytes);
+	}
+
+	
+	
+	@GetMapping("/restaurantes/uploadCarta/{id}")
+	public ModelAndView mostrarFormularioSubirCarta(@PathVariable Integer id) {
+
+	    ModelAndView mv = new ModelAndView("restaurantes/restauranteUploadCarta");
+
+	    Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
+
+	    if (restauranteOptional.isEmpty()) {
+	        return new ModelAndView("redirect:/restaurantes?error=RestauranteNoEncontrado");
+	    }
+
+	    mv.addObject("restaurante", restauranteOptional.get());
+	    return mv;
+	}
+
+	
+
+	@PostMapping("/restaurantes/uploadCarta/{id}")
+	public ModelAndView uploadCarta(
+	        @PathVariable Integer id,
+	        @RequestParam("carta") MultipartFile pdfFile) {
+
+	    Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
+
+	    if (restauranteOptional.isPresent()) {
+
+	        Restaurante restaurante = restauranteOptional.get();
+
+	        try {
+	            restaurante.setCartaPdf(pdfFile.getBytes());
+	            restauranteRepository.save(restaurante);
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            return new ModelAndView("redirect:/restaurantes?error=uploadFailed");
+	        }
+	    }
+
+	    return new ModelAndView("redirect:/restaurantes");
+	}
 
 }

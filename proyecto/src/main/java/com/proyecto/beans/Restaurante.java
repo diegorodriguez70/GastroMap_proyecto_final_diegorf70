@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,12 @@ public class Restaurante {
 	
 	private String ubicacion;
 	
+	@Lob //para hacer que el string sea mas grande (TIPO TEXT)
 	private String carta;
+	
+	@Lob
+	private byte[] cartaPdf;
+
 	
 	private String horarios;
 	
