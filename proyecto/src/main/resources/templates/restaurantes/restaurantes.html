@@ -50,11 +50,15 @@
                 <td th:text="${restaurante.contacto}"></td>
                 <td th:text="${restaurante.horarios}"></td>
 				<td>
+					<span th:text="${restaurante.carta}"></span>
+					<br>
+					<br>
 				    <a class="btn btn-secondary btn-sm"
 				       th:href="@{'/restaurantes/carta/' + ${restaurante.idRestaurante}}"
 				       target="_blank">
 				        Ver carta (PDF)
 				    </a>
+				
 				</td>
 				<td>
 				    <a class="btn btn-success"
