@@ -16,7 +16,7 @@
     </h1>
 
     <p class="text-center text-muted mb-5">
-        Desde aquí puedes gestionar tus reservas y tus cupones de descuento.
+        Desde aquí puedes gestionar tus reservas y cupones, y editar tu información.
     </p>
 
     <div class="row justify-content-center g-4">
@@ -30,9 +30,9 @@
                         Consulta, crea, edita o elimina las reservas de tu restaurante.
                     </p>
                     <div class="mt-auto">
-						<a th:href="@{/reservas/rest}" class="btn btn-primary w-100">
-							Reservas
-						</a>
+                        <a th:href="@{/reservas/rest}" class="btn btn-primary w-100">
+                            Reservas
+                        </a>
                     </div>
                 </div>
             </div>
@@ -56,8 +56,120 @@
         </div>
 
     </div>
+
+
+    <!-- ======================================== -->
+    <!-- INFORMACIÓN DEL RESTAURANTE / EDITABLE -->
+    <!-- ======================================== -->
+
+    <div class="mt-5">
+        <h2 class="mb-4 text-center">Información del restaurante</h2>
+
+        <div class="card shadow-sm p-4">
+
+
+            <form id="formEditar" th:action="@{/restaurantes/editSelf}" method="post">
+                <input type="hidden" name="idRestaurante" th:value="${restaurante.idRestaurante}">
+            </form>
+
+  
+            <p>
+                <strong>Nombre:</strong>
+                <span class="view" th:text="${restaurante.nombre}"></span>
+                <input class="edit form-control d-none" type="text" th:value="${restaurante.nombre}" name="nombre">
+            </p>
+
+
+            <p>
+                <strong>Ubicación:</strong>
+                <span class="view" th:text="${restaurante.ubicacion}"></span>
+                <input class="edit form-control d-none" type="text" th:value="${restaurante.ubicacion}" name="ubicacion">
+            </p>
+
+
+            <p>
+                <strong>Horarios:</strong>
+                <span class="view" th:text="${restaurante.horarios}"></span>
+                <input class="edit form-control d-none" type="text" th:value="${restaurante.horarios}" name="horarios">
+            </p>
+
+    
+            <p>
+                <strong>Contacto:</strong>
+                <span class="view" th:text="${restaurante.contacto}"></span>
+                <input class="edit form-control d-none" type="text" th:value="${restaurante.contacto}" name="contacto">
+            </p>
+
+			<p>
+	            <strong>Carta (Presentación):</strong>
+	            <span class="view" th:text="${restaurante.carta}"></span>
+	            <input class="edit form-control d-none" type="text" th:value="${restaurante.carta}" name="carta">
+	        </p>
+            <hr>
+
+          
+            
+
+            <div class="mt-4">
+
+                <!-- Botones originales -->
+                <a class="btn btn-secondary me-2"
+                   th:href="@{'/restaurantes/carta/' + ${restaurante.idRestaurante}}"
+                   target="_blank">
+                    Ver carta (PDF)
+                </a>
+
+                <a class="btn btn-warning"
+                   th:href="@{'/restaurantes/uploadCarta/' + ${restaurante.idRestaurante}}">
+                    Subir carta (PDF)
+                </a>
+
+                <!-- Botones de edición -->
+                <a class="btn btn-info ms-3" id="btnEditar">Editar datos</a>
+                <button class="btn btn-success ms-2 d-none" id="btnGuardar">Guardar</button>
+                <button class="btn btn-secondary ms-2 d-none" id="btnCancelar">Cancelar</button>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- SCRIPT DE EDICIÓN INLINE -->
+	<script>
+		const btnEditar = document.getElementById("btnEditar");
+		const btnGuardar = document.getElementById("btnGuardar");
+		const btnCancelar = document.getElementById("btnCancelar");
+		const viewElems = document.querySelectorAll(".view");
+		const editElems = document.querySelectorAll(".edit");
+		const form = document.getElementById("formEditar");
+		
+		// Activar modo edición
+		btnEditar.addEventListener("click", () => {
+		    viewElems.forEach(e => e.classList.add("d-none"));
+		    editElems.forEach(e => {
+		        e.classList.remove("d-none");
+		        e.setAttribute("form", "formEditar");
+		    });
+		
+		    btnEditar.classList.add("d-none");
+		    btnGuardar.classList.remove("d-none");
+		    btnCancelar.classList.remove("d-none");
+		});
+		
+		// Cancelar → recargar página
+		btnCancelar.addEventListener("click", () => {
+		    window.location.reload();
+		});
+		
+		// Guardar
+		btnGuardar.addEventListener("click", () => {
+		    form.submit();
+		});
+	</script>
+
 </body>
 </html>

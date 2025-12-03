@@ -26,6 +26,7 @@ import com.proyecto.beans.Usuario;
 import com.proyecto.repositories.CuponRepository;
 import com.proyecto.repositories.PerteneceRepository;
 import com.proyecto.repositories.RestauranteRepository;
+import com.proyecto.repositories.UsuarioRepository;
 import com.proyecto.services.CustomUserDetailsService;
 import com.proyecto.services.RestauranteService;
 
@@ -42,7 +43,10 @@ public class RestauranteController {
 
 	@Autowired
 	PerteneceRepository perteneceRepository;
-
+	
+	@Autowired
+	UsuarioRepository usuarioRepository;
+	
 	
 	@Autowired
 	RestauranteService restauranteService;
@@ -69,6 +73,28 @@ public class RestauranteController {
 	    }
 
 	    mv.addObject("restaurantes", restauranteRepository.findAll());
+	    return mv;
+	}
+	
+	
+	@GetMapping("/restaurantes/restauranteLogged")
+	public ModelAndView panelRestaurante(Principal principal) {
+
+	    ModelAndView mv = new ModelAndView("index_restaurante");
+
+	    // Usuario actual (nombreUsuario)
+	    String username = principal.getName();
+
+	    Restaurante restaurante = restauranteRepository.findByUsuario_NombreUsuario(username);
+
+	    if (restaurante == null) {
+	        mv.addObject("error", "No se encontró el restaurante asociado al usuario.");
+	        return mv;
+	    }
+
+	    mv.addObject("restaurante", restaurante);
+
+
 	    return mv;
 	}
 
@@ -303,7 +329,8 @@ public class RestauranteController {
 	@PostMapping("/restaurantes/uploadCarta/{id}")
 	public ModelAndView uploadCarta(
 	        @PathVariable Integer id,
-	        @RequestParam("carta") MultipartFile pdfFile) {
+	        @RequestParam("carta") MultipartFile pdfFile,
+	        Principal principal) {
 
 	    Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
 
@@ -320,7 +347,60 @@ public class RestauranteController {
 	        }
 	    }
 
+	  
+	    // Determinar rol
+	  
+	    String username = principal.getName();
+	    Usuario usuario = usuarioRepository.findByNombreUsuario(username);
+
+	    String rol = usuario.getPerfil().getTipo().toUpperCase();
+
+	    if (rol.equals("RESTAURANTE")) {
+	        return new ModelAndView("redirect:/restaurantes/restauranteLogged");
+	    }
+
+	    // Si es admin:
 	    return new ModelAndView("redirect:/restaurantes");
 	}
+	
+	
+	
+	
+	
+	@PostMapping("/restaurantes/editSelf")
+	public String guardarEdicionRestaurante(
+	        @ModelAttribute Restaurante restauranteForm,
+	        Principal principal) {
+
+	    Restaurante original = restauranteRepository.findById(restauranteForm.getIdRestaurante()).orElse(null);
+
+	    if (original == null) {
+	        return "redirect:/restaurantes/restauranteLogged?error=NoEncontrado";
+	    }
+
+	    // Seguridad: un restaurante solo puede editar SU propio restaurante
+	    String username = principal.getName();
+	    if (!original.getUsuario().getNombreUsuario().equals(username)) {
+	        return "redirect:/restaurantes/restauranteLogged?error=AccesoDenegado";
+	    }
+
+	    // CAMPOS PERMITIDOS PARA EDITAR
+
+	    original.setNombre(restauranteForm.getNombre());
+	    original.setUbicacion(restauranteForm.getUbicacion());
+	    original.setHorarios(restauranteForm.getHorarios());
+	    original.setContacto(restauranteForm.getContacto());
+	    original.setCarta(restauranteForm.getCarta());  // solo texto
+
+	    
+	  
+
+	    restauranteRepository.save(original);
+
+	    // Volver al panel del restaurante
+	    return "redirect:/restaurantes/restauranteLogged?success=Actualizado";
+	}
+
+
 
 }
