@@ -3,27 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Restaurantes</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
 </head>
+
+<style>
+    body {
+        background-color: var(--gm-light);
+        padding-top: 80px;
+    }
+
+    h1 {
+        color: var(--gm-brown);
+        font-weight: 800;
+    }
+
+    .table thead th {
+        background-color: var(--gm-brown-dark);
+        color: white;
+        border-color: var(--gm-brown-dark);
+    }
+
+    .table tbody tr:hover {
+        background-color: var(--gm-light);
+    }
+
+    .footer-gm {
+        width: 100%;
+        background: var(--gm-brown-dark);
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+        margin-top: 4rem;
+    }
+
+    .btn-teal:hover {
+        filter: brightness(0.9);
+    }
+
+    .mb-7 {
+        margin-bottom: 7rem;
+    }
+</style>
+
 <body>
 
 <div th:replace="fragmentos/navbar_user :: navbar_user"></div>
 
-<div class="container mt-5">
-    <h1 class="mb-4">Restaurantes</h1>
+<div class="container mt-5 mb-7">
 
-    <table class="table table-striped table-bordered">
+    <h1 class="mb-4 text-center">Restaurantes</h1>
+
+    <table class="table table-bordered table-hover shadow-sm">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-				<th>Ubicación</th>
+                <th>Ubicación</th>
                 <th>Contacto</th>
                 <th>Horarios</th>
                 <th>Carta</th>
                 <th>Cupones</th>
                 <th>Reservar</th>
-				
             </tr>
         </thead>
 
@@ -31,49 +74,51 @@
             <tr th:each="restaurante : ${restaurantes}">
                 <td th:text="${restaurante.idRestaurante}"></td>
                 <td th:text="${restaurante.nombre}"></td>
-				<td th:text="${restaurante.ubicacion}"></td>
+                <td th:text="${restaurante.ubicacion}"></td>
                 <td th:text="${restaurante.contacto}"></td>
                 <td th:text="${restaurante.horarios}"></td>
-                <td>
-					
-					<span th:text="${restaurante.carta}"></span>
-					<br>
-					<br>
-				    <a class="btn btn-secondary btn-sm"
-				       th:href="@{'/restaurantes/carta/' + ${restaurante.idRestaurante}}"
-				       target="_blank">
-				        Ver carta (PDF)
-				    </a>
-								
-				</td>
 
                 <td>
-                    <a class="btn btn-success"
-                       th:href="@{/restaurantes/{id}/cupones/user(id=${restaurante.idRestaurante})}">
-                        Ver cupones
+                    <span th:text="${restaurante.carta}"></span>
+                    <br><br>
+                    <a class="btn btn-outline-gm btn-sm"
+                       th:href="@{'/restaurantes/carta/' + ${restaurante.idRestaurante}}"
+                       target="_blank">
+                        <i class="bi bi-file-earmark-pdf"></i> Carta
                     </a>
                 </td>
-	
 
                 <td>
-					<a class="btn btn-primary"
-					   th:href="@{'/reservas/add/user'(idRestaurante=${restaurante.idRestaurante})}">
-					   Reservar
-					</a>
-
+                    <a class="btn btn-teal btn-sm w-100"
+                       th:href="@{/restaurantes/{id}/cupones/user(id=${restaurante.idRestaurante})}">
+                        <i class="bi bi-ticket-perforated"></i> Ver cupones
+                    </a>
                 </td>
-				
+
+                <td>
+                    <a class="btn btn-teal btn-sm w-100"
+                       th:href="@{'/reservas/add/user'(idRestaurante=${restaurante.idRestaurante})}">
+                        <i class="bi bi-calendar-plus"></i> Reservar
+                    </a>
+                </td>
+
             </tr>
         </tbody>
-
     </table>
 
-    <div class="mt-3">
-        <a class="btn btn-info" th:href="@{/reservas/user}">
-            Mis reservas
+    <div class="mt-4 text-center">
+        <a class="btn btn-outline-gm btn-lg" th:href="@{/reservas/user}">
+            <i class="bi bi-calendar-check"></i> Mis reservas
         </a>
     </div>
+
 </div>
+
+<footer class="footer-gm">
+    GastroMap © 2025 — Todos los derechos reservados
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

@@ -4,95 +4,253 @@
     <meta charset="UTF-8">
     <title>GastroMap - Usuario</title>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
 </head>
 
-<body class="bg-light">
+<style>
+    body {
+        background-color: var(--gm-light);
+        padding-top: 80px;
+    }
 
+    .hero {
+        background: linear-gradient(to bottom right, #f4ece4, #e8d7c7);
+        border-radius: var(--gm-radius);
+        padding: 3rem 2rem;
+        box-shadow: var(--gm-shadow);
+    }
 
+    .feature-card,
+    .sidebar-card,
+    .rest-card,
+    .cta-section {
+        border-radius: var(--gm-radius);
+        background: white;
+        border: 1px solid var(--gm-gray-light);
+        box-shadow: var(--gm-shadow);
+        padding: 2rem;
+        transition: 0.2s;
+    }
+
+    .feature-card:hover,
+    .rest-card:hover,
+    .sidebar-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+
+    .feature-icon,
+    .rest-icon,
+    .guide-icon {
+        font-size: 2.2rem;
+        color: var(--gm-teal);
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-icon {
+        font-size: 3rem;
+        color: var(--gm-teal);
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .cta-section {
+        background: var(--gm-teal);
+        color: white;
+        text-align: center;
+        border-radius: var(--gm-radius);
+        padding: 3rem 2rem;
+        margin-top: 4rem;
+    }
+
+    .footer-gm {
+        width: 100%;
+        background: var(--gm-brown-dark);
+        color: white;
+        padding: 2rem 0;
+        text-align: center;
+        margin-top: 4rem;
+    }
+</style>
+
+<body>
+
+<!-- NAVBAR -->
 <div th:replace="fragmentos/navbar_user :: navbar_user"></div>
 
 
-<div class="container mt-5 text-center">
+<!-- ======================= -->
+<!--   SECCIÓN SUPERIOR      -->
+<!-- ======================= -->
 
-    <h1 class="display-5 text-success fw-bold">
-        ¡Bienvenido a GastroMap!
-    </h1>
+<div class="container-fluid mt-5 px-4 px-lg-5">
+    <div class="row g-5">
 
-    <p class="lead mt-3">
-        Aquí podrás explorar restaurantes, consultar cupones y gestionar tus reservas de forma sencilla.
-    </p>
+        <!-- COLUMNA PRINCIPAL -->
+        <div class="col-lg-8 col-md-12">
 
-    <div class="mt-4">
-        <a class="btn btn-outline-success btn-lg me-3"
-           th:href="@{/restaurantes}">
-            Ver Restaurantes
-        </a>
+            <div class="hero text-center mb-5">
+                <h1 class="fw-bold" style="color: var(--gm-brown);">¡Bienvenido a GastroMap!</h1>
+                <p class="lead mt-3">Explora restaurantes, consulta cupones y gestiona tus reservas fácilmente.</p>
 
-        <a class="btn btn-success btn-lg"
-           th:href="@{/reservas/user}">
-            Mis Reservas
-        </a>
+                <div class="mt-4">
+                    <a class="btn btn-outline-gm btn-lg me-3" th:href="@{/restaurantes}">Ver Restaurantes</a>
+                    <a class="btn btn-gm btn-lg" th:href="@{/reservas/user}">Mis Reservas</a>
+                </div>
+            </div>
+
+            <div class="row text-center g-4 mb-5">
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-egg-fried"></i></div>
+                        <h4>Explora Restaurantes</h4>
+                        <p>Encuentra sitios increíbles cerca de ti.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-ticket-perforated"></i></div>
+                        <h4>Cupones Exclusivos</h4>
+                        <p>Ahorra en cada visita con cupones únicos.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-calendar-check"></i></div>
+                        <h4>Reserva en un Click</h4>
+                        <p>Rápido, fácil y sin complicaciones.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PANEL LATERAL -->
+        <div class="col-lg-4 col-md-12">
+
+            <div class="sidebar-card">
+
+                <div class="sidebar-icon">
+                    <i class="bi bi-person-circle"></i>
+                </div>
+
+                <h4 class="text-center fw-bold" style="color: var(--gm-brown);">
+                    Mi Perfil
+                </h4>
+
+                <form id="formEditar" th:action="@{/usuarios/editarSelf}" method="post">
+                    <input type="hidden" name="nombreUsuario" th:value="${usuario.nombreUsuario}">
+                </form>
+
+                <p><strong>Usuario:</strong><br>
+                    <span th:text="${usuario.nombreUsuario}"></span>
+                </p>
+
+                <p><strong>Nombre:</strong><br>
+                    <span class="view" th:text="${usuario.nombre}"></span>
+                    <input class="edit form-control d-none" type="text" th:value="${usuario.nombre}" name="nombre">
+                </p>
+
+                <p><strong>Contraseña:</strong><br>
+                    <span class="view" th:text="${usuario.contrasenia}"></span>
+                    <input class="edit form-control d-none" type="password" th:value="${usuario.contrasenia}" name="contrasenia">
+                </p>
+
+                <div class="mt-4">
+                    <a class="btn btn-teal w-100" id="btnEditar">Editar datos</a>
+                    <button class="btn btn-gm w-100 mt-2 d-none" id="btnGuardar">Guardar</button>
+                    <button class="btn btn-outline-gm w-100 mt-2 d-none" id="btnCancelar">Cancelar</button>
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-
-    <p class="text-muted mt-5 fst-italic">
-        ¿Necesitas ayuda o quieres sugerir mejoras?<br>
-        Escríbenos a:
-        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=gastromap.contacto@gmail.com"
-           target="_blank"
-           class="fw-bold text-success text-decoration-none">
-            gastromap.contacto@gmail.com
-        </a>
-    </p>
 </div>
 
-<hr class="border-success mt-5">
 
 
+<!-- =============================== -->
+<!--  SECCIÓN FULL WIDTH SIN SIDEBAR -->
+<!-- =============================== -->
 
-<div class="container mt-5">
+<div class="container-fluid mt-5 px-4 px-lg-5">
 
-    <h2 class="mb-4 text-center">Tu información personal</h2>
+    <h2 class="text-center mb-4" style="color: var(--gm-brown);">Restaurantes destacados</h2>
 
-    <div class="card shadow-sm p-4">
+    <div class="row g-4 mb-5">
+        <div class="col-md-4" th:each="rest, iter : ${restaurantes}" th:if="${iter.index < 3}">
+            <div class="rest-card">
+                <div class="rest-icon"><i class="bi bi-shop"></i></div>
+                <h5 class="fw-bold" th:text="${rest.nombre}"></h5>
+                <p class="text-muted" th:text="${rest.ubicacion}"></p>
+                <a class="btn btn-teal w-100" th:href="@{/restaurantes}">Ver más</a>
+            </div>
+        </div>
+    </div>
 
-        
-        <form id="formEditar" th:action="@{/usuarios/editarSelf}" method="post">
-            <input type="hidden" name="nombreUsuario" th:value="${usuario.nombreUsuario}">
-        </form>
 
-        <p>
-            <strong>Usuario:</strong>
-            <span th:text="${usuario.nombreUsuario}"></span>
-        </p>
+    <h2 class="text-center mb-4" style="color: var(--gm-brown);">Cómo funciona GastroMap</h2>
 
-   
-        <p>
-            <strong>Nombre:</strong>
-            <span class="view" th:text="${usuario.nombre}"></span>
-            <input class="edit form-control d-none" type="text" th:value="${usuario.nombre}" name="nombre">
-        </p>
+    <div class="row text-center g-4 mb-5">
 
-     
-        <p>
-            <strong>Contraseña:</strong>
-            <span class="view" th:text="${usuario.contrasenia}"></span>
-            <input class="edit form-control d-none" type="password" th:value="${usuario.contrasenia}" name="contrasenia">
-        </p>
+        <div class="col-md-3">
+            <div class="feature-card">
+                <div class="guide-icon"><i class="bi bi-search"></i></div>
+                <h5>Busca</h5>
+                <p>Encuentra restaurantes cerca de ti.</p>
+            </div>
+        </div>
 
-        <div class="mt-4">
-          
-            <a class="btn btn-info" id="btnEditar">Editar datos</a>
-            <!-- Botones ocultos por defecto -->
-            <button class="btn btn-success ms-2 d-none" id="btnGuardar">Guardar</button>
-            <button class="btn btn-secondary ms-2 d-none" id="btnCancelar">Cancelar</button>
+        <div class="col-md-3">
+            <div class="feature-card">
+                <div class="guide-icon"><i class="bi bi-stars"></i></div>
+                <h5>Descubre</h5>
+                <p>Consulta cartas y mucho más.</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="feature-card">
+                <div class="guide-icon"><i class="bi bi-ticket-perforated"></i></div>
+                <h5>Ahorra</h5>
+                <p>Usa cupones exclusivos.</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="feature-card">
+                <div class="guide-icon"><i class="bi bi-calendar-event"></i></div>
+                <h5>Reserva</h5>
+                <p>Todo desde tu panel personal.</p>
+            </div>
         </div>
 
     </div>
 
+
+    <div class="cta-section">
+        <p class="fw-bold mb-3">¿Listo para seguir explorando?</p>
+        <p class="mb-4">Descubre nuevos restaurantes y aprovecha ofertas exclusivas.</p>
+
+        <a class="btn btn-light btn-lg me-3" th:href="@{/restaurantes}">Ver Restaurantes</a>
+        <a class="btn btn-outline-light btn-lg" th:href="@{/reservas/user}">Mis Reservas</a>
+    </div>
+
 </div>
 
+
+<!-- FOOTER FULL WIDTH CORRECTO -->
+<footer class="footer-gm">
+    GastroMap © 2025 — Todos los derechos reservados
+</footer>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -111,7 +269,6 @@
             e.classList.remove("d-none");
             e.setAttribute("form", "formEditar");
         });
-
         btnEditar.classList.add("d-none");
         btnGuardar.classList.remove("d-none");
         btnCancelar.classList.remove("d-none");

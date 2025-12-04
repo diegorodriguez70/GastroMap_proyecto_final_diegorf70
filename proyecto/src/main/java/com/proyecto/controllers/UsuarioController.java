@@ -1,6 +1,7 @@
 package com.proyecto.controllers;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.proyecto.beans.Perfil;
 import com.proyecto.beans.Usuario;
+import com.proyecto.beans.Restaurante;
+
 import com.proyecto.repositories.PerfilRepository;
+import com.proyecto.repositories.RestauranteRepository;
 import com.proyecto.repositories.UsuarioRepository;
 
 import jakarta.validation.Valid;
@@ -27,6 +31,11 @@ public class UsuarioController {
 
     @Autowired
     PerfilRepository perfilRepository;
+    
+    @Autowired
+    RestauranteRepository restauranteRepository;
+    
+    
     
     
     @GetMapping("/usuarios")
@@ -153,6 +162,9 @@ public class UsuarioController {
         }
 
         salida.addObject("usuario", usuario);
+        
+        List<Restaurante> restaurantes = (List<Restaurante>) restauranteRepository.findAll();
+        salida.addObject("restaurantes", restaurantes);
 
         return salida;
     }
