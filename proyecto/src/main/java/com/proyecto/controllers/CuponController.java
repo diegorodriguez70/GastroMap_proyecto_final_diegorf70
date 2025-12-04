@@ -290,6 +290,7 @@ public class CuponController {
 	    for (Cupon cupon : cupones) {
 	        cupon.setTiempoDuracion("Terminado");
 	        cupon.setCodigo("-");
+	        cupon.setDescuento(null);
 	    }
 
 	    cuponRepository.saveAll(cupones);

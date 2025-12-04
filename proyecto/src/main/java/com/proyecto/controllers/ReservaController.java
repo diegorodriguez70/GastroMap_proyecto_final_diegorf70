@@ -121,7 +121,7 @@ public class ReservaController {
 
 	    Reserva reserva = reservaOptional.get();
 
-	    // ✔ Si es USER y la reserva no es suya → prohibido
+	    // Si es USER y la reserva no es suya → prohibido
 	    if (usuario.getPerfil().getTipo().equals("USER")
 	        && !reserva.getUsuario().getNombreUsuario().equals(usuario.getNombreUsuario())) {
 
