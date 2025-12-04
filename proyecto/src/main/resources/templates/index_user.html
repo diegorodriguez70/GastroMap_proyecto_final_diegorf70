@@ -77,19 +77,16 @@
 
 <body>
 
-<!-- NAVBAR -->
+
 <div th:replace="fragmentos/navbar_user :: navbar_user"></div>
 
 
-<!-- ======================= -->
-<!--   SECCIÓN SUPERIOR      -->
-<!-- ======================= -->
 
 <div class="container-fluid mt-5 px-4 px-lg-5">
     <div class="row g-5">
 
         <!-- COLUMNA PRINCIPAL -->
-        <div class="col-lg-8 col-md-12">
+        <div class="col-lg-9 col-md-12">
 
             <div class="hero text-center mb-5">
                 <h1 class="fw-bold" style="color: var(--gm-brown);">¡Bienvenido a GastroMap!</h1>
@@ -132,7 +129,7 @@
         </div>
 
         <!-- PANEL LATERAL -->
-        <div class="col-lg-4 col-md-12">
+        <div class="col-lg-3 col-md-12">
 
             <div class="sidebar-card">
 
@@ -159,7 +156,7 @@
 
                 <p><strong>Contraseña:</strong><br>
                     <span class="view" th:text="${usuario.contrasenia}"></span>
-                    <input class="edit form-control d-none" type="password" th:value="${usuario.contrasenia}" name="contrasenia">
+                    <input class="edit form-control d-none" type="text" th:value="${usuario.contrasenia}" name="contrasenia">
                 </p>
 
                 <div class="mt-4">
@@ -177,9 +174,6 @@
 
 
 
-<!-- =============================== -->
-<!--  SECCIÓN FULL WIDTH SIN SIDEBAR -->
-<!-- =============================== -->
 
 <div class="container-fluid mt-5 px-4 px-lg-5">
 
