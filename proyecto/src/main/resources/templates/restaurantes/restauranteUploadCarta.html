@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Subir carta PDF</title>
@@ -20,7 +21,22 @@
         </div>
 
         <button class="btn btn-primary" type="submit">Subir carta</button>
-        <a class="btn btn-secondary ms-2" th:href="@{/restaurantes}">Volver</a>
+
+
+        <!-- ADMIN -->
+        <a class="btn btn-secondary ms-2" 
+           sec:authorize="hasRole('ADMIN')" 
+           th:href="@{/restaurantes}">
+            Volver
+        </a>
+
+        <!-- RESTAURANTE -->
+        <a class="btn btn-secondary ms-2" 
+           sec:authorize="hasRole('RESTAURANTE')" 
+           th:href="@{/restaurantes/restauranteLogged}">
+            Volver
+        </a>
+        
     </form>
 </div>
 
