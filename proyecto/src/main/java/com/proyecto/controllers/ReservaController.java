@@ -194,7 +194,7 @@ public class ReservaController {
 
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-	    // el restaurante no puede ser -1
+	    // Validar restaurante -1
 	    if (reserva.getRestaurante() != null &&
 	            reserva.getRestaurante().getIdRestaurante() == -1) {
 
@@ -207,8 +207,7 @@ public class ReservaController {
 	        return "reservas/reservaForm_user";
 	    }
 
-	   
-	    //  VALIDACIÓN FECHA PASADA
+	    // Validación fecha
 	    try {
 	        LocalDateTime fecha = LocalDateTime.parse(reserva.getFecha());
 	        if (fecha.isBefore(LocalDateTime.now())) {
@@ -218,8 +217,6 @@ public class ReservaController {
 	        result.rejectValue("fecha", "error.fecha", "Formato de fecha inválido");
 	    }
 
-
-	    // Si hay errores
 	    if (result.hasErrors()) {
 
 	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
@@ -245,9 +242,7 @@ public class ReservaController {
 	        return "reservas/reservaForm_user";
 	    }
 
-
-	
-	    //  Protección especial para RESTAURANTE
+	    // Protección para RESTAURANTE
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
 
 	        Restaurante restaurante = restauranteRepository
@@ -266,10 +261,22 @@ public class ReservaController {
 	            reserva.setRestaurante(rest);
 	        }
 	    }
+ 
+	    //  MANTENER USUARIO ORIGINAL SI ES EDICIÓN
+	
+	    if (reserva.getIdReserva() != 0) {
 
-	    reserva.setUsuario(usuario);
+	        Reserva original = reservaRepository.findById(reserva.getIdReserva()).orElse(null);
+
+	        if (original != null) {
+	            reserva.setUsuario(original.getUsuario());
+	        }
+
+	    } else {
+	        reserva.setUsuario(usuario);
+	    }
+
 	    reservaService.saveReserva(reserva);
-
 
 	    // Redirección según rol
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
@@ -282,6 +289,7 @@ public class ReservaController {
 
 	    return "redirect:/reservas/user";
 	}
+
 
 
 
