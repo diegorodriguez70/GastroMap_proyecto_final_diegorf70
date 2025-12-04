@@ -41,7 +41,7 @@ public class LoginController {
                 return "index";  
 
             case "USER":
-                return "index_user"; 
+            	return "redirect:/usuarios/userLogged"; 
 
             case "RESTAURANTE":
             	return "redirect:/restaurantes/restauranteLogged";

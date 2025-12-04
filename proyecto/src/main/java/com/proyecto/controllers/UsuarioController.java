@@ -1,5 +1,6 @@
 package com.proyecto.controllers;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,6 +136,54 @@ public class UsuarioController {
 
         return new ModelAndView("redirect:/usuarios");
     }
+    
+    
+    
+    
+    @GetMapping("/usuarios/userLogged")
+    public ModelAndView userLogged(Principal principal) {
+
+        ModelAndView mv = new ModelAndView("index_user");
+
+        String username = principal.getName();
+        Usuario usuario = usuarioRepository.findById(username).orElse(null);
+
+        if (usuario == null) {
+            return new ModelAndView("redirect:/index?error=UsuarioNoEncontrado");
+        }
+
+        mv.addObject("usuario", usuario);
+
+        return mv;
+    }
+
+    
+    @PostMapping("/usuarios/editarSelf")
+    public String editarSelf(
+            @ModelAttribute Usuario usuarioForm,
+            Principal principal) {
+
+        Usuario original = usuarioRepository.findById(usuarioForm.getNombreUsuario()).orElse(null);
+
+        if (original == null) {
+            return "redirect:/usuarios/userLogged?error=NoEncontrado";
+        }
+
+        // Seguridad: solo puede editarse a sí mismo
+        if (!original.getNombreUsuario().equals(principal.getName())) {
+            return "redirect:/usuarios/userLogged?error=AccesoDenegado";
+        }
+
+        // Campos editables
+        original.setNombre(usuarioForm.getNombre());
+        original.setContrasenia(usuarioForm.getContrasenia());
+
+        usuarioRepository.save(original);
+
+        return "redirect:/usuarios/userLogged?success=Actualizado";
+    }
+
+
 
     
 }
