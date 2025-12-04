@@ -22,16 +22,15 @@ public class SecurityConfig {
 
             .authorizeHttpRequests(auth -> auth
 
-                // =======================
+               
                 // RUTAS PÚBLICAS
-                // =======================
+              
                 .requestMatchers("/login", "/addUsuario", "/saveUsuario",
                                  "/css/**", "/js/**", "/images/**").permitAll()
 
-                // =======================================================
+    
                 // RUTAS DE USUARIO (SOLO ADMIN)
-                // =======================================================
-                .requestMatchers(
+                            .requestMatchers(
                     "/usuarios",
                     "/usuarios/delete/**",
                     "/usuarios/update/**",
@@ -44,9 +43,9 @@ public class SecurityConfig {
                     "/usuarios/editarSelf"
                 ).hasRole("USER")
 
-                // =======================================================
+             
                 // RUTAS SOLO ADMIN (Restaurantes)
-                // =======================================================
+             
                 .requestMatchers(
                     "/restaurantes/delete/**",
                     "/restaurantes/add",
@@ -56,32 +55,32 @@ public class SecurityConfig {
                     "/restaurantes/*/cupones/existentes"
                 ).hasRole("ADMIN")
 
-                // =======================================================
+              
                 // RUTAS SOLO RESTAURANTE
-                // =======================================================
+              
                 .requestMatchers(
                     "/restaurantes/restauranteLogged",
                     "/restaurantes/editSelf"
                 ).hasRole("RESTAURANTE")
 
-                // =======================================================
+            
                 // RUTAS COMPARTIDAS (Admin + Restaurante)
-                // =======================================================
+           
                 .requestMatchers(
                     "/restaurantes/uploadCarta/**"
                 ).hasAnyRole("ADMIN", "RESTAURANTE")
 
-                // =======================================================
+             
                 // RUTAS SOLO USER
-                // =======================================================
+             
                 .requestMatchers(
                     "/restaurantes/*/cupones/user",
                     "/reservas/user/**"
                 ).hasRole("USER")
 
-                // =======================================================
+           
                 // RUTAS DE RESERVAS
-                // =======================================================
+            
 
                 // Restaurante + Admin
                 .requestMatchers("/reservas/rest").hasAnyRole("ADMIN", "RESTAURANTE")
@@ -100,9 +99,9 @@ public class SecurityConfig {
                 .requestMatchers("/reservas/add/user").hasRole("USER")
 
 
-                // =======================================================
+               
                 // RUTAS DE CUPONES
-                // =======================================================
+             
 
                 // Solo admin
                 .requestMatchers(
@@ -126,22 +125,21 @@ public class SecurityConfig {
                     "/cupones/rest/deleteAll"
                 ).hasAnyRole("ADMIN", "RESTAURANTE")
 
-                // =======================
-                // Cualquier otra ruta requiere login
-                // =======================
+                  // Cualquier otra ruta requiere login
+               
                 .anyRequest().authenticated()
             )
 
-            // =======================
+          
             // ERROR 403 PERSONALIZADO
-            // =======================
+
             .exceptionHandling(e ->
                     e.accessDeniedHandler((req, res, ex) -> res.sendRedirect("/403"))
             )
 
-            // =======================
+           
             // LOGIN / LOGOUT
-            // =======================
+    
             .formLogin(form -> form
                     .loginPage("/login")
                     .loginProcessingUrl("/login")

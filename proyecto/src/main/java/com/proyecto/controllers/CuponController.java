@@ -103,7 +103,7 @@ public class CuponController {
 
 	    cuponService.saveCupon(cupon);
 
-	    // Si el usuario es restaurante → vincular al restaurante
+	    // Si el usuario es restaurante vincular al restaurante
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
 
 	        Restaurante restaurante = restauranteRepository
@@ -163,7 +163,7 @@ public class CuponController {
 	
 	
 	
-	// ============ RESTAURANTE: ver sus propios cupones ============
+	// RESTAURANTE: ver sus propios cupones
 	@GetMapping("/cupones/rest")
 	public ModelAndView cuponesRest(Principal principal) {
 
@@ -177,14 +177,14 @@ public class CuponController {
 	            .map(p -> p.getCupon())
 	            .toList();
 
-	    ModelAndView mv = new ModelAndView("restaurantes/cupones_restaurante");
-	    mv.addObject("cupones", cupones);
-	    mv.addObject("restaurante", restaurante); 
+	    ModelAndView salida = new ModelAndView("restaurantes/cupones_restaurante");
+	    salida.addObject("cupones", cupones);
+	    salida.addObject("restaurante", restaurante); 
 
-	    return mv;
+	    return salida;
 	}
 	
-	@Transactional
+	@Transactional // asegura que la eliminación de la relación entre cupón y restaurantese ejecute dentro de una única transacción. Si ocurre algún error, se revierte, evitando inconsistencias en la tabla intermedia "pertenece".
 	@GetMapping("/cupones/rest/delete/{idCupon}")
 	public String deleteCuponRest(
 	        @PathVariable int idCupon,
@@ -213,12 +213,12 @@ public class CuponController {
 	    Restaurante restaurante = restauranteRepository
 	            .findByUsuario_NombreUsuario(usuario.getNombreUsuario());
 
-	    ModelAndView mv = new ModelAndView("cupones/cuponForm_restaurante");
+	    ModelAndView salida = new ModelAndView("cupones/cuponForm_restaurante");
 
-	    mv.addObject("cupon", new Cupon());
-	    mv.addObject("restaurante", restaurante);
+	    salida.addObject("cupon", new Cupon());
+	    salida.addObject("restaurante", restaurante);
 
-	    return mv;
+	    return salida;
 	}
 
 	@GetMapping("/cupones/rest/existentes")
@@ -241,11 +241,11 @@ public class CuponController {
 	            .filter(c -> !idsAsociados.contains(c.getIdCupon()))
 	            .toList();
 
-	    ModelAndView mv = new ModelAndView("cupones/cupones_existentes_restaurante");
-	    mv.addObject("cupones", disponibles);
-	    mv.addObject("restaurante", restaurante);
+	    ModelAndView salida = new ModelAndView("cupones/cupones_existentes_restaurante");
+	    salida.addObject("cupones", disponibles);
+	    salida.addObject("restaurante", restaurante);
 
-	    return mv;
+	    return salida;
 	}
 	
 	@GetMapping("/cupones/rest/addExistente/{idCupon}")

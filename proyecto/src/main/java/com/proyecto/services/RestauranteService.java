@@ -79,7 +79,7 @@ public class RestauranteService {
 
 	    if (esNuevo) {
 
-	        // generate username (sin espacios, minúsculas)
+	        // genera username (sin espacios, minúsculas)
 	        String username = restaurante.getNombre()
 	                .toLowerCase()
 	                .replace(" ", "_");
@@ -91,7 +91,7 @@ public class RestauranteService {
 	        Usuario nuevo = new Usuario();
 	        nuevo.setNombreUsuario(username);
 	        nuevo.setNombre(restaurante.getNombre());
-	        nuevo.setContrasenia(username);  // misma por simplicidad
+	        nuevo.setContrasenia(username);  
 
 	        // perfil restaurante ID = 3
 	        Perfil perfilRest = perfilRepository.findById(3).get();

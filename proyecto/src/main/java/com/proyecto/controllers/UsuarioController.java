@@ -31,18 +31,18 @@ public class UsuarioController {
     
     @GetMapping("/usuarios")
     public ModelAndView listarUsuarios() {
-        ModelAndView mv = new ModelAndView("usuarios/usuarios");
-        mv.addObject("usuarios", usuarioRepository.findAll());
-        return mv;
+        ModelAndView salida = new ModelAndView("usuarios/usuarios");
+        salida.addObject("usuarios", usuarioRepository.findAll());
+        return salida;
     }
     
     
     
     @GetMapping("/addUsuario")
     public ModelAndView formCrearUsuario() {
-        ModelAndView modelAndView = new ModelAndView("usuarios/usuarioForm");
-        modelAndView.addObject("usuario", new Usuario());
-        return modelAndView;
+        ModelAndView salida = new ModelAndView("usuarios/usuarioForm");
+        salida.addObject("usuario", new Usuario());
+        return salida;
     }
     @PostMapping("/saveUsuario")
     public ModelAndView saveUsuario(
@@ -98,7 +98,7 @@ public class UsuarioController {
     @GetMapping("/usuarios/update/{nombreUsuario}")
     public ModelAndView updateUsuario(@PathVariable String nombreUsuario) {
 
-        ModelAndView modelAndView = new ModelAndView("usuarios/usuarioEditForm");
+        ModelAndView salida = new ModelAndView("usuarios/usuarioEditForm");
 
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(nombreUsuario);
 
@@ -107,9 +107,9 @@ public class UsuarioController {
             return new ModelAndView("redirect:/usuarios?error=UsuarioNoEncontrado");
         }
 
-        modelAndView.addObject("usuario", usuarioOptional.get());
+        salida.addObject("usuario", usuarioOptional.get());
 
-        return modelAndView;
+        return salida;
     }
 
     @PostMapping("/usuarios/update")
@@ -143,7 +143,7 @@ public class UsuarioController {
     @GetMapping("/usuarios/userLogged")
     public ModelAndView userLogged(Principal principal) {
 
-        ModelAndView mv = new ModelAndView("index_user");
+        ModelAndView salida = new ModelAndView("index_user");
 
         String username = principal.getName();
         Usuario usuario = usuarioRepository.findById(username).orElse(null);
@@ -152,9 +152,9 @@ public class UsuarioController {
             return new ModelAndView("redirect:/index?error=UsuarioNoEncontrado");
         }
 
-        mv.addObject("usuario", usuario);
+        salida.addObject("usuario", usuario);
 
-        return mv;
+        return salida;
     }
 
     

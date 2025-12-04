@@ -52,15 +52,15 @@ public class ReservaController {
 
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-	    ModelAndView mv;
+	    ModelAndView salida;
 
 	    if (usuario.getPerfil().getTipo().equals("ADMIN")) {
-	        mv = new ModelAndView("reservas/reservas");
-	        mv.addObject("reservas", reservaRepository.findAll());
+	    	salida = new ModelAndView("reservas/reservas");
+	    	salida.addObject("reservas", reservaRepository.findAll());
 	    }
 	    else if (usuario.getPerfil().getTipo().equals("USER")) {
-	        mv = new ModelAndView("reservas/reservas_user");
-	        mv.addObject("reservas",
+	    	salida = new ModelAndView("reservas/reservas_user");
+	    	salida.addObject("reservas",
 	                reservaRepository.findByUsuario_NombreUsuario(usuario.getNombreUsuario()));
 	    }
 	    else if (usuario.getPerfil().getTipo().equals("RESTAURANTE")) {
@@ -68,9 +68,9 @@ public class ReservaController {
 	        Restaurante restaurante = restauranteRepository
 	                .findByUsuario_NombreUsuario(usuario.getNombreUsuario());
 
-	        mv = new ModelAndView("reservas/reservas_restaurante");
+	        salida = new ModelAndView("reservas/reservas_restaurante");
 
-	        mv.addObject(
+	        salida.addObject(
 	            "reservas",
 	            reservaRepository.findByRestaurante_IdRestaurante(
 	                restaurante.getIdRestaurante()
@@ -78,12 +78,12 @@ public class ReservaController {
 	        );
 	    }
 	    else {
-	        mv = new ModelAndView("reservas/reservas");
-	        mv.addObject("reservas", new ArrayList<>());
+	    	salida = new ModelAndView("reservas/reservas");
+	    	salida.addObject("reservas", new ArrayList<>());
 	    }
 
 
-	    return mv;
+	    return salida;
 	}
 	
 	
@@ -96,15 +96,15 @@ public class ReservaController {
 	    Restaurante restaurante = restauranteRepository
 	            .findByUsuario_NombreUsuario(usuario.getNombreUsuario());
 
-	    ModelAndView mv = new ModelAndView("reservas/reservas_restaurante");
+	    ModelAndView salida = new ModelAndView("reservas/reservas_restaurante");
 
-	    mv.addObject("reservas",
+	    salida.addObject("reservas",
 	            reservaRepository.findByRestaurante_IdRestaurante(
 	                    restaurante.getIdRestaurante()
 	            )
 	    );
 
-	    return mv;
+	    return salida;
 	}
 
 
@@ -121,16 +121,16 @@ public class ReservaController {
 
 	    Reserva reserva = reservaOptional.get();
 
-	    // Si es USER y la reserva no es suya → prohibido
+	    // Si es USER y la reserva no es suya prohibido
 	    if (usuario.getPerfil().getTipo().equals("USER")
 	        && !reserva.getUsuario().getNombreUsuario().equals(usuario.getNombreUsuario())) {
 
 	        return new ModelAndView("redirect:/reservas");
 	    }
 
-	    ModelAndView mv = new ModelAndView("reservas/reserva");
-	    mv.addObject("reserva", reserva);
-	    return mv;
+	    ModelAndView salida = new ModelAndView("reservas/reserva");
+	    salida.addObject("reserva", reserva);
+	    return salida;
 	}
 
 	
@@ -152,17 +152,17 @@ public class ReservaController {
 
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-	    // Si NO es admin → fuera
+	    // Si NO es admin fuera
 	    if (!usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
 	        return new ModelAndView("redirect:/reservas");
 	    }
 
-	    ModelAndView mv = new ModelAndView("reservas/reservaForm");
+	    ModelAndView salida = new ModelAndView("reservas/reservaForm");
 
-	    mv.addObject("reserva", new Reserva());
-	    mv.addObject("restaurantes", restauranteRepository.findAll());
+	    salida.addObject("reserva", new Reserva());
+	    salida.addObject("restaurantes", restauranteRepository.findAll());
 
-	    return mv;
+	    return salida;
 	}
 
 	@GetMapping("/reservas/add/user")
@@ -179,10 +179,10 @@ public class ReservaController {
 
 	    r.setRestaurante(restaurante);
 
-	    ModelAndView mv = new ModelAndView("reservas/reservaForm_user");
-	    mv.addObject("reserva", r);
+	    ModelAndView salida = new ModelAndView("reservas/reservaForm_user");
+	    salida.addObject("reserva", r);
 
-	    return mv;
+	    return salida;
 	}
 
 	@PostMapping("/reservas/saveReserva")
@@ -194,7 +194,7 @@ public class ReservaController {
 
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-	    // Validación adicional: el restaurante no puede ser -1
+	    // el restaurante no puede ser -1
 	    if (reserva.getRestaurante() != null &&
 	            reserva.getRestaurante().getIdRestaurante() == -1) {
 
@@ -207,9 +207,8 @@ public class ReservaController {
 	        return "reservas/reservaForm_user";
 	    }
 
-	    // ============================================
+	   
 	    //  VALIDACIÓN FECHA PASADA
-	    // ============================================
 	    try {
 	        LocalDateTime fecha = LocalDateTime.parse(reserva.getFecha());
 	        if (fecha.isBefore(LocalDateTime.now())) {
@@ -219,10 +218,8 @@ public class ReservaController {
 	        result.rejectValue("fecha", "error.fecha", "Formato de fecha inválido");
 	    }
 
-	    // ============================================
-	    // Si hay errores
-	    // ============================================
 
+	    // Si hay errores
 	    if (result.hasErrors()) {
 
 	        if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
@@ -249,9 +246,8 @@ public class ReservaController {
 	    }
 
 
-	    // ============================================
+	
 	    //  Protección especial para RESTAURANTE
-	    // ============================================
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
 
 	        Restaurante restaurante = restauranteRepository
@@ -274,9 +270,8 @@ public class ReservaController {
 	    reserva.setUsuario(usuario);
 	    reservaService.saveReserva(reserva);
 
-	    // ============================================
+
 	    // Redirección según rol
-	    // ============================================
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
 	        return "redirect:/reservas";
 	    }
@@ -306,9 +301,8 @@ public class ReservaController {
 
 	    Reserva reserva = optional.get();
 
-	    // ======================================
+	    
 	    // CASO RESTAURANTE
-	    // ======================================
 	    if (usuario.getPerfil().getTipo().equals("RESTAURANTE")) {
 
 	        Restaurante restaurante = restauranteRepository
@@ -319,18 +313,17 @@ public class ReservaController {
 	            return new ModelAndView("redirect:/reservas/rest");
 	        }
 
-	        ModelAndView mv = new ModelAndView("reservas/reservaForm_rest");
-	        mv.addObject("reserva", reserva);
-	        return mv;
+	        ModelAndView salida = new ModelAndView("reservas/reservaForm_rest");
+	        salida.addObject("reserva", reserva);
+	        return salida;
 	    }
 
-	    // ======================================
+	   
 	    // CASO ADMIN
-	    // ======================================
-	    ModelAndView mv = new ModelAndView("reservas/reservaForm");
-	    mv.addObject("reserva", reserva);
-	    mv.addObject("restaurantes", restauranteRepository.findAll());
-	    return mv;
+	    ModelAndView salida = new ModelAndView("reservas/reservaForm");
+	    salida.addObject("reserva", reserva);
+	    salida.addObject("restaurantes", restauranteRepository.findAll());
+	    return salida;
 	}
 
 
@@ -342,10 +335,10 @@ public class ReservaController {
 
 	    List<Reserva> reservas = reservaRepository.findByUsuario_NombreUsuario(principal.getName());
 
-	    ModelAndView mv = new ModelAndView("reservas/reservas_user");
-	    mv.addObject("reservas", reservas);
+	    ModelAndView salida = new ModelAndView("reservas/reservas_user");
+	    salida.addObject("reservas", reservas);
 
-	    return mv;
+	    return salida;
 	}
 	
 	//Para añadir reservas desde el perfil Restaurante solo para el mismo Restaurante
@@ -354,7 +347,7 @@ public class ReservaController {
 
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-	    // Seguridad: si NO es un restaurante → fuera
+	    // Seguridad: si NO es un restaurante fuera
 	    if (!usuario.getPerfil().getTipo().equalsIgnoreCase("RESTAURANTE")) {
 	        return new ModelAndView("redirect:/reservas");
 	    }
@@ -367,10 +360,10 @@ public class ReservaController {
 	    Reserva r = new Reserva();
 	    r.setRestaurante(restaurante);
 
-	    ModelAndView mv = new ModelAndView("reservas/reservaForm_rest");
-	    mv.addObject("reserva", r);
+	    ModelAndView salida = new ModelAndView("reservas/reservaForm_rest");
+	    salida.addObject("reserva", r);
 
-	    return mv;
+	    return salida;
 	}
 
 

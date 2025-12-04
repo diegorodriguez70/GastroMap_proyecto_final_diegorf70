@@ -60,27 +60,27 @@ public class RestauranteController {
 
 	    Usuario usuario = userService.findByNombreUsuario(principal.getName());
 
-	    ModelAndView mv;
+	    ModelAndView salida;
 
 	    if (usuario.getPerfil().getTipo().equalsIgnoreCase("ADMIN")) {
-	        mv = new ModelAndView("restaurantes/restaurantes");
+	    	salida = new ModelAndView("restaurantes/restaurantes");
 	    } 
 	    else if (usuario.getPerfil().getTipo().equalsIgnoreCase("USER")) {
-	        mv = new ModelAndView("restaurantes/restaurantes_user");
+	    	salida = new ModelAndView("restaurantes/restaurantes_user");
 	    } 
 	    else {
-	        mv = new ModelAndView("restaurantes/restaurantes");
+	    	salida = new ModelAndView("restaurantes/restaurantes");
 	    }
 
-	    mv.addObject("restaurantes", restauranteRepository.findAll());
-	    return mv;
+	    salida.addObject("restaurantes", restauranteRepository.findAll());
+	    return salida;
 	}
 	
 	
 	@GetMapping("/restaurantes/restauranteLogged")
 	public ModelAndView panelRestaurante(Principal principal) {
 
-	    ModelAndView mv = new ModelAndView("index_restaurante");
+	    ModelAndView salida = new ModelAndView("index_restaurante");
 
 	    // Usuario actual (nombreUsuario)
 	    String username = principal.getName();
@@ -88,14 +88,14 @@ public class RestauranteController {
 	    Restaurante restaurante = restauranteRepository.findByUsuario_NombreUsuario(username);
 
 	    if (restaurante == null) {
-	        mv.addObject("error", "No se encontró el restaurante asociado al usuario.");
-	        return mv;
+	    	salida.addObject("error", "No se encontró el restaurante asociado al usuario.");
+	        return salida;
 	    }
 
-	    mv.addObject("restaurante", restaurante);
+	    salida.addObject("restaurante", restaurante);
 
 
-	    return mv;
+	    return salida;
 	}
 
 
@@ -182,17 +182,17 @@ public class RestauranteController {
 	@GetMapping("/restaurantes/{idRestaurante}/addCupon")
 	public ModelAndView showAddCuponForm(@PathVariable int idRestaurante) {
 
-	    ModelAndView mav = new ModelAndView("restaurantes/addCupon");
+	    ModelAndView salida = new ModelAndView("restaurantes/addCupon");
 
 	    // Restaurante seleccionado
 	    Restaurante restaurante = restauranteRepository.findById(idRestaurante).orElse(null);
-	    mav.addObject("restaurante", restaurante);
+	    salida.addObject("restaurante", restaurante);
 
 	    // Todos los cupones
 	    Iterable<Cupon> cupones = cuponRepository.findAll();
-	    mav.addObject("cupones", cupones);
+	    salida.addObject("cupones", cupones);
 
-	    return mav;
+	    return salida;
 	}
 	
 	@PostMapping("/restaurantes/{idRestaurante}/addCupon")
@@ -227,7 +227,7 @@ public class RestauranteController {
 	    return "redirect:/restaurantes/" + idRestaurante + "/cupones";
 	}
 	
-	// ============ ADMIN: mostrar cupones NO vinculados ============
+	//ADMIN: mostrar cupones NO vinculados 
 	@GetMapping("/restaurantes/{idRestaurante}/cupones/existentes")
 	public ModelAndView verCuponesNoVinculadosAdmin(@PathVariable int idRestaurante) {
 
@@ -247,14 +247,14 @@ public class RestauranteController {
 	            .filter(c -> !yaVinculados.contains(c))
 	            .toList();
 
-	    ModelAndView mv = new ModelAndView("restaurantes/cupones_existentes_admin");
-	    mv.addObject("cupones", disponibles);
-	    mv.addObject("restaurante", restaurante);
+	    ModelAndView salida = new ModelAndView("restaurantes/cupones_existentes_admin");
+	    salida.addObject("cupones", disponibles);
+	    salida.addObject("restaurante", restaurante);
 
-	    return mv;
+	    return salida;
 	}
 
-	// ============ USER: ver cupones de un restaurante ============
+	//  USER: ver cupones de un restaurante
 	@GetMapping("/restaurantes/{idRestaurante}/cupones/user")
 	public ModelAndView verCuponesRestauranteUser(@PathVariable int idRestaurante) {
 
@@ -269,11 +269,11 @@ public class RestauranteController {
 	            .map(p -> p.getCupon())
 	            .toList();
 
-	    ModelAndView mv = new ModelAndView("restaurantes/cupones_restaurante_user");
-	    mv.addObject("cupones", cupones);
-	    mv.addObject("restaurante", restaurante);
+	    ModelAndView salida = new ModelAndView("restaurantes/cupones_restaurante_user");
+	    salida.addObject("cupones", cupones);
+	    salida.addObject("restaurante", restaurante);
 
-	    return mv;
+	    return salida;
 	}
 
 	
@@ -312,7 +312,7 @@ public class RestauranteController {
 	@GetMapping("/restaurantes/uploadCarta/{id}")
 	public ModelAndView mostrarFormularioSubirCarta(@PathVariable Integer id) {
 
-	    ModelAndView mv = new ModelAndView("restaurantes/restauranteUploadCarta");
+	    ModelAndView salida = new ModelAndView("restaurantes/restauranteUploadCarta");
 
 	    Optional<Restaurante> restauranteOptional = restauranteRepository.findById(id);
 
@@ -320,8 +320,8 @@ public class RestauranteController {
 	        return new ModelAndView("redirect:/restaurantes?error=RestauranteNoEncontrado");
 	    }
 
-	    mv.addObject("restaurante", restauranteOptional.get());
-	    return mv;
+	    salida.addObject("restaurante", restauranteOptional.get());
+	    return salida;
 	}
 
 	

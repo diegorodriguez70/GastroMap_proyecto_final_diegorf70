@@ -13,7 +13,7 @@ public class PerteneceId implements Serializable {
 
 
     public PerteneceId() {
-        // Obligatorio para JPA
+       
     }
 
     public PerteneceId(int idRestaurante, int idCupon) {

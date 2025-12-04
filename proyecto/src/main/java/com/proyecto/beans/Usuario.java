@@ -39,9 +39,9 @@ public class Usuario implements UserDetails{
     @OneToOne(mappedBy = "usuario")
     private Restaurante restaurante;
 
-    // -------------------------------------------------------
-    // SPRING SECURITY: construcción de permisos por perfil
-    // -------------------------------------------------------
+ 
+    // construcción de permisos por perfil
+   
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> permisos = new ArrayList<>();
@@ -78,21 +78,41 @@ public class Usuario implements UserDetails{
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled() { return true; }
 
-    // Getters & setters normales
-    public String getNombreUsuario() { return nombreUsuario; }
-    public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
+   
+    public String getNombreUsuario() {
+    	return nombreUsuario; 
+    }
+    public void setNombreUsuario(String nombreUsuario) {
+    	this.nombreUsuario = nombreUsuario; 
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public String getNombre() {
+    	return nombre; 
+    }
+    public void setNombre(String nombre) {
+    	this.nombre = nombre; 
+    }
 
-    public String getContrasenia() { return contrasenia; }
-    public void setContrasenia(String contrasenia) { this.contrasenia = contrasenia; }
+    public String getContrasenia() {
+    	return contrasenia;
+    }
+    public void setContrasenia(String contrasenia) {
+    	this.contrasenia = contrasenia; 
+    }
 
-    public Perfil getPerfil() { return perfil; }
-    public void setPerfil(Perfil perfil) { this.perfil = perfil; }
+    public Perfil getPerfil() {
+    	return perfil; 
+    }
+    public void setPerfil(Perfil perfil) {
+    	this.perfil = perfil; 
+    }
 
-    public List<Reserva> getReservas() { return reservas; }
-    public void setReservas(List<Reserva> reservas) { this.reservas = reservas; }
+    public List<Reserva> getReservas() {
+    	return reservas; 
+    }
+    public void setReservas(List<Reserva> reservas) {
+    	this.reservas = reservas; 
+    }
 
 	
 }
