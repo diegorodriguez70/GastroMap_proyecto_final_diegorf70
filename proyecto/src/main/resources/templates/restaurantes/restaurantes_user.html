@@ -59,7 +59,7 @@
     <table class="table table-bordered table-hover shadow-sm">
         <thead>
             <tr>
-                <th>ID</th>
+              
                 <th>Nombre</th>
                 <th>Ubicación</th>
                 <th>Contacto</th>
@@ -72,7 +72,7 @@
 
         <tbody>
             <tr th:each="restaurante : ${restaurantes}">
-                <td th:text="${restaurante.idRestaurante}"></td>
+                
                 <td th:text="${restaurante.nombre}"></td>
                 <td th:text="${restaurante.ubicacion}"></td>
                 <td th:text="${restaurante.contacto}"></td>

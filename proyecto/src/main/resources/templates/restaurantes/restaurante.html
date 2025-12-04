@@ -4,23 +4,68 @@
     <meta charset="UTF-8">
     <title>Detalle del Restaurante</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<body>
-	<div th:replace="fragmentos/navbar :: navbar"></div>
 
-    <div class="container mt-5">
-        <a th:href="@{/restaurantes}" class="btn btn-secondary mb-3">Volver a la Lista</a>
-        <div th:if="${restaurante}">
-            <h1 class="mb-4" th:text="${restaurante.nombre}">Nombre del Restaurante</h1>
-            <p><strong>ID:</strong> <span th:text="${restaurante.idRestaurante}"></span></p>
-            <p><strong>Ubicación:</strong> <span th:text="${restaurante.ubicacion}"></span></p>
-            <p><strong>Horarios:</strong> <span th:text="${restaurante.horarios}"></span></p>
-            <p><strong>Contacto:</strong> <span th:text="${restaurante.contacto}"></span></p>
-            <p><strong>Carta:</strong> <span th:text="${restaurante.carta}"></span></p> 
-        </div>
-        <div th:unless="${restaurante}" class="alert alert-danger">
-            Restaurante con el ID especificado no encontrado.
+<body>
+
+<div th:replace="fragmentos/navbar :: navbar"></div>
+
+<div class="container mt-5">
+
+    <a th:href="@{/restaurantes}" class="btn btn-outline-secondary mb-4">
+        <i class="bi bi-arrow-left"></i> Volver a la lista
+    </a>
+
+    <div th:if="${restaurante}">
+
+        <div class="card shadow-sm">
+
+            <div class="card-header">
+                <h3 class="mb-0" th:text="${restaurante.nombre}">Nombre del Restaurante</h3>
+            </div>
+
+            <div class="card-body">
+
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item">
+                        <strong>ID:</strong>
+                        <span th:text="${restaurante.idRestaurante}"></span>
+                    </li>
+
+                    <li class="list-group-item">
+                        <strong>Ubicación:</strong>
+                        <span th:text="${restaurante.ubicacion}"></span>
+                    </li>
+
+                    <li class="list-group-item">
+                        <strong>Horarios:</strong>
+                        <span th:text="${restaurante.horarios}"></span>
+                    </li>
+
+                    <li class="list-group-item">
+                        <strong>Contacto:</strong>
+                        <span th:text="${restaurante.contacto}"></span>
+                    </li>
+
+                    <li class="list-group-item">
+                        <strong>Carta:</strong>
+                        <span th:text="${restaurante.carta}"></span>
+                    </li>
+
+                </ul>
+
+            </div>
         </div>
     </div>
+
+    <div th:unless="${restaurante}" class="alert alert-danger mt-4">
+        Restaurante con el ID especificado no encontrado.
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

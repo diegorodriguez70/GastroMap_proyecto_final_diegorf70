@@ -84,7 +84,7 @@
     <table class="table table-bordered table-hover shadow-sm" th:if="${!#lists.isEmpty(cupones)}">
         <thead>
             <tr>
-                <th>ID Cupón</th>
+             
                 <th>Tiempo de duración</th>
                 <th>Descuento</th>
                 <th>Código</th>
@@ -93,7 +93,7 @@
 
         <tbody>
             <tr th:each="cupon : ${cupones}">
-                <td th:text="${cupon.idCupon}"></td>
+               
                 <td th:text="${cupon.tiempoDuracion}"></td>
                 <td th:text="${cupon.descuento} + '%'"></td>
 
