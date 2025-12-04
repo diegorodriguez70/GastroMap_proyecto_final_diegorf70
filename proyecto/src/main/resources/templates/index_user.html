@@ -10,10 +10,10 @@
 
 <body class="bg-light">
 
-<!-- Navbar exclusiva de usuarios -->
+
 <div th:replace="fragmentos/navbar_user :: navbar_user"></div>
 
-<!-- CONTENIDO PRINCIPAL -->
+
 <div class="container mt-5 text-center">
 
     <h1 class="display-5 text-success fw-bold">
@@ -57,25 +57,24 @@
 
     <div class="card shadow-sm p-4">
 
-        <!-- Formulario oculto -->
+        
         <form id="formEditar" th:action="@{/usuarios/editarSelf}" method="post">
             <input type="hidden" name="nombreUsuario" th:value="${usuario.nombreUsuario}">
         </form>
 
-        <!-- nombreUsuario (NO editable) -->
         <p>
             <strong>Usuario:</strong>
             <span th:text="${usuario.nombreUsuario}"></span>
         </p>
 
-        <!-- NOMBRE -->
+   
         <p>
             <strong>Nombre:</strong>
             <span class="view" th:text="${usuario.nombre}"></span>
             <input class="edit form-control d-none" type="text" th:value="${usuario.nombre}" name="nombre">
         </p>
 
-        <!-- CONTRASEÑA -->
+     
         <p>
             <strong>Contraseña:</strong>
             <span class="view" th:text="${usuario.contrasenia}"></span>
@@ -83,7 +82,7 @@
         </p>
 
         <div class="mt-4">
-            <!-- Botón editar -->
+          
             <a class="btn btn-info" id="btnEditar">Editar datos</a>
             <!-- Botones ocultos por defecto -->
             <button class="btn btn-success ms-2 d-none" id="btnGuardar">Guardar</button>
@@ -95,7 +94,7 @@
 </div>
 
 
-<!-- ============ SCRIPTS ============ -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>

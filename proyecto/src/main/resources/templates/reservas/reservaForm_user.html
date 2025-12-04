@@ -14,7 +14,7 @@
 
     <form th:action="@{/reservas/saveReserva}" th:object="${reserva}" method="post">
 
-        <!-- ✔ Campo hidden correcto -->
+        
         <input type="hidden" th:field="*{restaurante.idRestaurante}" />
 
  

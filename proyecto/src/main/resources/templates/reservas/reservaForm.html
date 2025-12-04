@@ -42,14 +42,14 @@
 
             <select class="form-select" id="restaurante" th:field="*{restaurante.idRestaurante}">
 
-                <!-- Opción placeholder con valor válido para int -->
+              
                 <option value="-1"
                         disabled
                         th:selected="${reserva.restaurante == null || reserva.restaurante.idRestaurante <= 0}">
                     -- Selecciona un restaurante --
                 </option>
 
-                <!-- Lista de restaurantes -->
+               
                 <option th:each="rest : ${restaurantes}"
                         th:value="${rest.idRestaurante}"
                         th:text="${rest.nombre}">
