@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: gastromap_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssword
+      MYSQL_DATABASE: proyecto
+    ports:
+      - "3307:3306"
+    volumes:
+      - gastromap_data:/var/lib/mysql
+    restart: always
+
+  gastromap:
+    build: .
+    container_name: gastromap_app
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/proyecto?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: P@ssword
+    ports:
+      - "8080:8080"
+    restart: always
+
+volumes:
+  gastromap_data:
